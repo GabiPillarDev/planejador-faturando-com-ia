@@ -11,7 +11,7 @@
     --st-postado:#8a8781; --st-agendado:#1b7f4d; --st-pronto:#2563eb;
     --st-prod:#d9640c; --st-ref:#be3a8a; --st-ideia:#c2860a; --st-definir:#b9b6ae;
 
-    --g-escrita:#2b6cb0; --g-youtube:#c4302b;
+    --g-escrita:#2b6cb0; --g-youtube:#c4302b; --g-instagram:#c13584;
 
     --f-captacao:#0f766e; --f-captacao-bg:#e6f4f2;
     --f-evento:#7c3aed;   --f-evento-bg:#f1ebfe;
@@ -31,7 +31,7 @@
       --accent:#eceae6; --on-accent:#141413; --focus:#6f9cf5;
       --st-postado:#96938d; --st-agendado:#4cc389; --st-pronto:#7aa5f7;
       --st-prod:#f59e4a; --st-ref:#e879b8; --st-ideia:#e0a92e; --st-definir:#55524d;
-      --g-escrita:#7aa5f7; --g-youtube:#f07a75;
+      --g-escrita:#7aa5f7; --g-youtube:#f07a75; --g-instagram:#e879b8;
       --f-captacao:#2dd4bf; --f-captacao-bg:#0e2e2b;
       --f-evento:#a78bfa;   --f-evento-bg:#241a3d;
       --f-carrinho:#f87171; --f-carrinho-bg:#341617;
@@ -48,7 +48,7 @@
     --accent:#eceae6; --on-accent:#141413; --focus:#6f9cf5;
     --st-postado:#96938d; --st-agendado:#4cc389; --st-pronto:#7aa5f7;
     --st-prod:#f59e4a; --st-ref:#e879b8; --st-ideia:#e0a92e; --st-definir:#55524d;
-    --g-escrita:#7aa5f7; --g-youtube:#f07a75;
+    --g-escrita:#7aa5f7; --g-youtube:#f07a75; --g-instagram:#e879b8;
     --f-captacao:#2dd4bf; --f-captacao-bg:#0e2e2b;
     --f-evento:#a78bfa;   --f-evento-bg:#241a3d;
     --f-carrinho:#f87171; --f-carrinho-bg:#341617;
@@ -157,6 +157,7 @@
   .group-head .nome{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
   .group-head[data-g="escrita"] .nome{color:var(--g-escrita)}
   .group-head[data-g="youtube"] .nome{color:var(--g-youtube)}
+  .group-head[data-g="instagram"] .nome{color:var(--g-instagram)}
   .group-head .nota{font-size:11.5px;color:var(--text-3)}
   .group-head .resumo{font-size:11px;color:var(--text-3);margin-left:auto;font-variant-numeric:tabular-nums}
 
@@ -411,6 +412,12 @@
 
   // ---------- estrutura ----------
   const GRUPOS = [
+    { id:'instagram', nome:'Instagram', canais:[
+      { id:'stories',  nome:'Stories' },
+      { id:'feed',     nome:'Feed' },
+      { id:'ig-live',  nome:'Live' },
+      { id:'ig-canal', nome:'Canal de transmissão' },
+    ]},
     { id:'escrita', nome:'Escrita', canais:[
       { id:'linkedin', nome:'LinkedIn' },
       { id:'threads',  nome:'Threads e X' },
@@ -849,7 +856,7 @@
     const c = canal(p.c);
     const g = GRUPOS.find(x => x.id === c.grupo);
     const quando = p.d ? `${WDL[parse(p.d).getDay()]}, ${dm(p.d)}` : `${SEMANAS[p.w].nome}, dia a definir`;
-    $('#pEyebrow').textContent = `${g.id === 'youtube' ? 'YouTube · ' : ''}${c.nome}`;
+    $('#pEyebrow').textContent = `${g.id !== 'escrita' ? g.nome + ' · ' : ''}${c.nome}`;
     $('#pEyebrow').style.color = `var(--g-${g.id})`;
     $('#pTitle').textContent = tituloDe(p);
     $('#pSub').textContent = p.fase ? `${quando} · ${p.fase}` : quando;
