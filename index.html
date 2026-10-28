@@ -1,4 +1,4 @@
-<title>Calendário WFIA</title>
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style></head><body><title>Calendário WFIA</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <style>
   /* Layout: grade semanal canal x dia, igual ao planejador do time; leitura e apresentação, sem edição */
@@ -227,10 +227,11 @@
   }
   aside.open{transform:none}
   .panel-head{padding:16px 18px 12px;border-bottom:1px solid var(--border);display:flex;align-items:flex-start;gap:10px}
+  .panel-head > div:first-child{flex:1;min-width:0}
   .panel-head .eyebrow{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
   .panel-head h2{margin:2px 0 0;font-size:16px;font-weight:650;letter-spacing:-.01em;line-height:1.3;text-wrap:balance}
   .panel-head p{margin:3px 0 0;font-size:12.5px;color:var(--text-2)}
-  .icon-btn{width:28px;height:28px;flex-shrink:0;margin-left:auto;display:grid;place-items:center;border:1px solid var(--border);background:var(--surface);border-radius:8px;color:var(--text-2);line-height:1}
+  .icon-btn{width:28px;height:28px;flex-shrink:0;display:grid;place-items:center;border:1px solid var(--border);background:var(--surface);border-radius:8px;color:var(--text-2);line-height:1}
   .icon-btn:hover{border-color:var(--border-strong);color:var(--text)}
   .panel-nav{display:flex;gap:6px;padding:9px 18px;border-bottom:1px solid var(--border)}
   .panel-nav button{border:1px solid var(--border);background:var(--surface-2);border-radius:7px;padding:4px 10px;font-size:12.5px;color:var(--text-2)}
@@ -289,6 +290,62 @@
   .bloco-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px}
   .bloco-head label{margin:0}
 
+  /* edição */
+  .barra{display:flex;justify-content:center;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap;min-height:28px}
+  .estado{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--text-3)}
+  .estado b{width:7px;height:7px;border-radius:99px;background:var(--text-3)}
+  .estado.ok b{background:var(--st-agendado)}
+  .estado.pendente{color:var(--st-prod);font-weight:600} .estado.pendente b{background:var(--st-prod)}
+  .estado.salvando b{background:var(--focus);animation:pulsa 1s ease-in-out infinite}
+  @keyframes pulsa{0%,100%{opacity:1}50%{opacity:.3}}
+  .btn{border:1px solid var(--border);background:var(--surface);border-radius:8px;padding:5px 11px;font-size:13px;color:var(--text-2);white-space:nowrap}
+  .btn:hover{border-color:var(--border-strong);color:var(--text)}
+  .btn-primary{background:var(--accent);color:var(--on-accent);border-color:var(--accent);font-weight:600}
+  .btn-primary:hover{opacity:.88;color:var(--on-accent)}
+  .btn:focus-visible,.btn-editar:focus-visible,.opc:focus-visible,.add:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
+  .btn-editar{border:1px solid var(--border);background:var(--surface-2);border-radius:8px;padding:4px 11px;font-size:12.5px;font-weight:600;color:var(--text-2);flex-shrink:0}
+  .btn-editar:hover{border-color:var(--border-strong);color:var(--text)}
+  .btn-editar[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+
+  .grid.editavel .cell{position:relative}
+  .add{
+    border:1px dashed var(--border-strong);background:transparent;border-radius:7px;color:var(--text-3);
+    font-size:15px;line-height:1;padding:3px 0;width:100%;opacity:0;transition:opacity .12s,color .12s,border-color .12s;
+  }
+  .cell:not(.filled) .add{flex:1;opacity:.35;border-color:transparent}
+  .cell:hover .add,.add:focus-visible{opacity:1}
+  .add:hover{color:var(--focus);border-color:var(--focus)}
+  .cell.filled .add{flex:0 0 auto;margin-top:auto}
+  @media (hover:none){ .add{opacity:.6} }
+
+  .form{display:flex;flex-direction:column;gap:13px}
+  .dupla{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .campo{display:flex;flex-direction:column;gap:5px;min-width:0}
+  .campo label{font-size:10.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--text-3)}
+  .campo input,.campo select,.campo textarea{
+    width:100%;font:inherit;font-size:13.5px;color:var(--text);background:var(--surface-2);
+    border:1px solid var(--border);border-radius:8px;padding:7px 10px;
+  }
+  .campo textarea{resize:vertical;line-height:1.5}
+  .campo .texto-edit{font-size:13.5px;min-height:200px}
+  .campo input:focus,.campo select:focus,.campo textarea:focus{outline:none;border-color:var(--focus);box-shadow:0 0 0 3px color-mix(in srgb,var(--focus) 15%,transparent)}
+  .card .campo{max-width:360px}
+  .dica{font-size:11.5px;color:var(--text-3)}
+  .opcs{display:flex;flex-wrap:wrap;gap:5px}
+  .opc{border:1px solid var(--border);background:var(--surface-2);border-radius:99px;padding:4px 11px;font-size:12.5px;color:var(--text-2)}
+  .opc:hover{border-color:var(--border-strong)}
+  .opc[aria-pressed="true"]{background:var(--accent);color:var(--on-accent);border-color:var(--accent);font-weight:600}
+  .rodape-form{display:flex;justify-content:flex-start;padding-top:4px;border-top:1px solid var(--border)}
+  .btn-perigo{border:none;background:none;padding:6px 0;font-size:12.5px;color:var(--text-3)}
+  .btn-perigo:hover,.btn-perigo.armado{color:var(--f-carrinho);font-weight:600}
+
+  .toast{
+    position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translate(-50%,14px);
+    background:var(--accent);color:var(--on-accent);padding:9px 16px;border-radius:99px;
+    font-size:13px;z-index:80;opacity:0;pointer-events:none;transition:all .22s;max-width:calc(100vw - 32px);text-align:center;
+  }
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+
   @media (max-width:1100px){
     :root{--label-w:96px}
   }
@@ -318,6 +375,7 @@
     <div class="legend" id="legendStatus"></div>
     <span class="resumo-geral" id="resumoGeral"></span>
   </div>
+  <div class="barra" id="barra"></div>
 </header>
 
 <main id="main"></main>
@@ -330,6 +388,7 @@
       <h2 id="pTitle"></h2>
       <p id="pSub"></p>
     </div>
+    <button class="btn-editar" id="editar" type="button" hidden>Editar</button>
     <button class="icon-btn" id="closePanel" aria-label="Fechar">✕</button>
   </div>
   <div class="panel-nav">
@@ -340,7 +399,8 @@
   <div class="panel-body" id="pBody"></div>
 </aside>
 
-<script>
+<script type="application/json" id="dados">{"perfil":"Pedro Sobral","posts":[{"c":"linkedin","d":"2026-10-26","fase":"Captação","ideia":"Especialista em IA: toda agência vai precisar desse crachá.","persona":"Dono de agência","funil":"Meio","cta":"Evento","status":"Postado","links":[["Post publicado","https://lnkd.in/p/dwR8x_Nd"],["Referência","https://www.instagram.com/p/Deu2O7mI4Bh/?img_index=3"]],"texto":"A Exame acabou de postar que 𝗮𝘀 𝘃𝗮𝗴𝗮𝘀 𝗾𝘂𝗲 𝗲𝘅𝗶𝗴𝗲𝗺 𝗜𝗔 𝗾𝘂𝗮𝘀𝗲 𝘁𝗿𝗶𝗽𝗹𝗶𝗰𝗮𝗿𝗮𝗺 𝗻𝗼 𝗕𝗿𝗮𝘀𝗶𝗹.\n\nMas se você é dono de agência, não olhe para essa notícia achando que é só sobre \"emprego\".\n\nIsso é o mercado gritando que as empresas estão desesperadas por eficiência e buscando 𝗽𝗿𝗼𝗳𝗶𝘀𝘀𝗶𝗼𝗻𝗮𝗶𝘀 𝗾𝘂𝗲 𝘀𝗮𝗶𝗯𝗮𝗺 𝗮𝗽𝗹𝗶𝗰𝗮𝗿 𝗮 𝘁𝗲𝗰𝗻𝗼𝗹𝗼𝗴𝗶𝗮 𝗻𝗼 𝗱𝗶𝗮 𝗮 𝗱𝗶𝗮 𝗰𝗼𝗺 𝘀𝗲𝗻𝘀𝗼 𝗰𝗿𝗶́𝘁𝗶𝗰𝗼 𝗲 𝘃𝗶𝘀𝗮̃𝗼 𝗱𝗲 𝗻𝗲𝗴𝗼́𝗰𝗶𝗼.\n\nE se as empresas estão buscando isso, a sua agência tem 𝗱𝘂𝗮𝘀 𝗲𝘀𝗰𝗼𝗹𝗵𝗮𝘀: ou você forma esse profissional para oferecer esse serviço antes da concorrência, ou vai ver seus clientes contratando isso de fora.\n\nMas eu não tô falando de alguém que é mestre em Claude Code, Open Claw, N8N, que sabe tudo de token e de API.\n\nEu tô falando de um profissional que consegue fazer 𝗕𝗘𝗠 𝗲𝘀𝘀𝗮𝘀 𝟯 𝗰𝗼𝗶𝘀𝗮𝘀:\n\n𝟭. Olhar pra uma empresa e ver quais são os 𝗽𝗿𝗼𝗯𝗹𝗲𝗺𝗮𝘀 𝗿𝗲𝗮𝗶𝘀 que vale a pena resolver com IA.\n\n𝟮. 𝗗𝗲𝘀𝗲𝗻𝘃𝗼𝗹𝘃𝗲𝗿 𝘀𝗼𝗹𝘂𝗰̧𝗼̃𝗲𝘀 para esses problemas usando inteligência artificial, é claro.\n\n𝟯. E, o mais importante, conseguir 𝗩𝗘𝗡𝗗𝗘𝗥 𝗲𝘀𝘀𝗮𝘀 𝘀𝗼𝗹𝘂𝗰̧𝗼̃𝗲𝘀 para todo tipo de negócio.\n\n𝗔𝘀 𝗲𝗺𝗽𝗿𝗲𝘀𝗮𝘀 𝗾𝘂𝗲𝗿𝗲𝗺 𝗰𝗼𝗺𝗽𝗿𝗮𝗿 𝗮 𝘀𝗼𝗹𝘂𝗰̧𝗮̃𝗼 𝗱𝗼 𝗽𝗿𝗼𝗯𝗹𝗲𝗺𝗮 𝗱𝗲𝗹𝗮𝘀. E a agência que souber entregar essa ponta vai dominar o mercado nos próximos anos.\n\nSó que esse profissional completo ainda quase não existe no mercado.\n\nE é por isso que eu e o time do Viver de IA nos unimos nessa Black para 𝗙𝗢𝗥𝗠𝗔𝗥 esse profissional, seja para você colocar dentro da sua operação ou para você mesmo se tornar essa referência.\n\nO lançamento oficial vai ser em uma imersão intensiva de trabalho e mão na massa, o 𝗪𝗢𝗥𝗞𝗦𝗛𝗢𝗣 𝗙𝗔𝗧𝗨𝗥𝗔𝗡𝗗𝗢 𝗖𝗢𝗠 𝗜𝗔.\n\nNós vamos te mostrar na prática como 𝗺𝗮𝗽𝗲𝗮𝗿, 𝗶𝗺𝗽𝗹𝗲𝗺𝗲𝗻𝘁𝗮𝗿 𝗲 𝘃𝗲𝗻𝗱𝗲𝗿 𝘀𝗼𝗹𝘂𝗰̧𝗼̃𝗲𝘀 𝗰𝗼𝗺 𝗜𝗔 para qualquer tipo de empresa.\n\nÉ um novo serviço para a sua agência ganhar dinheiro e abrir portas que hoje estão fechadas, mas também é uma nova forma de organizar a sua própria operação, para fazer muito mais com menos recursos usando inteligência artificial."},{"c":"linkedin","d":"2026-10-28","fase":"Captação","ideia":"","persona":"A definir","funil":"Topo","cta":"Não","status":"Agendado","links":[["Referência","https://www.instagram.com/p/DezB3rODkm0/?img_index=2"]]},{"c":"linkedin","d":"2026-10-29","fase":"Captação, dia do reality","ideia":"Newsletter sobre a empresa de um trilhão de dólares.","persona":"Dono de agência, Gestor de tráfego","funil":"Topo","cta":"Não","status":"Agendado","formato":"Newsletter"},{"c":"linkedin","d":"2026-10-30","fase":"Captação","ideia":"","persona":"A definir","funil":"Meio","cta":"Evento","status":"Agendado","links":[["Referência","https://www.instagram.com/p/De6t1eyHD6i/"]]},{"c":"linkedin","d":"2026-11-03","fase":"Evento, aula 1","ideia":"A frase mais perigosa: \"sempre foi assim\"","persona":"Dono de agência, Gestor de tráfego","funil":"Meio","objetivo":"Conversão","formato":"Foto + texto","cta":"Evento","status":"Feito","links":[["Referência","https://www.linkedin.com/posts/ana-paula-longhini_sempre-foi-assim-talvez-essa-seja-uma-share-7415762594671726592-6qXa/"]],"texto":"Essa é a narrativa perfeita que as pessoas inventam para justificar a própria incapacidade de melhorar as coisas, de se atualizar e de sair do lugar. É a desculpa oficial para a paralisação.\n\nSó que no mercado digital, essa frase é ainda mais perigosa. Aqui, as coisas não mudam em anos, mas em semanas.\n\nHá mais de 9 anos formando gestores de tráfego, eu já vi de tudo. Mas o que está acontecendo agora é, sem dúvida, a maior curva de mudança da história da nossa profissão: a Inteligência Artificial.\n\nApesar disso, eu vejo muita gente ainda cruzando os braços e se negando a aprender a usar IA de verdade.\n\nE quando eu digo \"de verdadade\", não estou falando de pedir para uma ferramenta escrever um textinho bonitinho para o Instagram ou gerar uma imagem aleatória.\n\nEstou falando de **pegar a inteligência artificial para resolver problemas reais de empresas**.\n\nPara criar atendentes no WhatsApp que convertem mais que humanos, automatizar processos comerciais, estruturar CRMs e salvar negócios que estão perdendo dinheiro por lentidão. Quem aprende a fazer isso cobra caro. Quem continua ignorando, fica para trás.\n\nO jogo mudou. Continuar fazendo as coisas do mesmo jeito só porque \"sempre foi assim\" vai te deixar fora do mercado.\n\nQuer virar esse jogo?\n\nComeça hoje.\n\nNosso **Workshop Faturando com IA** começa hoje, e eu vou te mostrar o passo a passo prático para você dominar essas soluções e começar a faturar com isso.\n\nAs vagas na sala são limitadas e não vai ter replay.\n\nClica no link dos comentários ou da minha bio para garantir seu lugar agora. Bora para cima!"},{"c":"linkedin","d":"2026-11-04","fase":"Evento, aula 2","ideia":"Não foi sorte, você é bom mesmo.","persona":"Todas","funil":"Topo","objetivo":"Alcance","formato":"Foto + texto","cta":"Evento","status":"Feito","links":[["Referência","https://www.instagram.com/p/DemARs-ib0s/"]],"obs":"No documento a linha aparece como \"qui 04/11\". A data 04/11 cai numa quarta, e a frequência da semana (ter, qua, sex) confirma a quarta.","texto":"Você passou na prova, conseguiu a vaga, resolveu o problema que ninguém resolvia, e a primeira coisa que pensou foi \"dei sorte\".\n\nA gente costuma explicar o próprio resultado como acaso e o resultado dos outros como mérito.\n\nSe deu certo, foi porque você estudou, se preparou, insistiu quando dava vontade de largar. Isso é seu."},{"c":"linkedin","d":"2026-11-06","fase":"Carrinho","ideia":"Newsletter: Como ganhar dinheiro com inteligência artificial em 2026: 7 serviços que empresas já estão pagando","persona":"Gestor de tráfego, Dono de agência","funil":"Fundo","objetivo":"Conversão","formato":"Newsletter","cta":"Vendas","status":"Feito","links":[["Texto da newsletter","https://docs.google.com/document/d/1GT1XdUyBTZOnmRkBWmnBMuTxPWTl1pzwD3B33HUsVy0/edit?tab=t.0#heading=h.e88uewzgghdt"]]},{"c":"linkedin","d":"2026-11-09","fase":"Carrinho","ideia":"Eu vendo dinheiro.","persona":"Gestor de tráfego","funil":"Fundo","cta":"","status":"Referência","links":[["Referência","https://www.instagram.com/p/DeH4SfMIzUv/?img_index=1"]],"obs":"O CTA final ainda está com \"xxxx\" no lugar do nome da oferta.","texto":"Eu vendo dinheiro. E você, gestor de tráfego, também.\n\nIsso tem que estar na ponta da língua. O anúncio é só o meio. O que você entrega pro cliente é consulta marcada na clínica, mesa cheia no restaurante, fila de encomenda no e-commerce, carrinho de compras lotado.\n\nQuando você sobe uma campanha no Meta Ads ou no Google Ads, o que você está fazendo de verdade é colocar mais dinheiro no bolso do cliente. Você aumenta o faturamento dele e faz o negócio crescer.\n\nE quando você entende isso e fica bom em entregar esse resultado, vai por mim: chove gente querendo te contratar. Você vira um profissional muito valorizado, quase indispensável.\n\nFoi assim que eu fiz meu primeiro milhão como gestor de tráfego. Eu não tinha berço de ouro, não terminei a faculdade e não vendia curso. Era só prestação de serviço.\n\nHoje, antes dos 30, eu tenho coisas que eu nem sonhava ter aos 70.\n\nVendendo dinheiro, eu conquistei a liberdade pra viver a vida que eu sempre quis e consegui realizar os meus sonhos e os de quem eu amo. E é vendendo dinheiro que a gente, gestor de tráfego, muda a vida de muita gente.\n\nSe você quer virar esse jogo de verdade e aprender a vender dinheiro na prática, **as inscrições para a xxxx**\n\nAs vagas são limitadas e as condições especiais não vão durar muito tempo.\n\nClica no link da bio e garante o seu lugar agora mesmo!"},{"c":"linkedin","d":"2026-11-11","fase":"Carrinho","ideia":"Newsletter: Você não vai perder seu emprego para a IA. Vai perder para alguém que usa IA","persona":"A definir","funil":"A definir","cta":"","status":"A definir","formato":"Newsletter","obs":"Adaptar post do blog."},{"c":"linkedin","d":"2026-11-13","fase":"Carrinho","ideia":"Escalada.","persona":"Todas","funil":"Topo","cta":"","status":"Referência","formato":"Carrossel com imagens","links":[["Referência","https://www.instagram.com/p/Degz8VAkaml/?img_index=1"],["Imagens do carrossel (Drive)","https://drive.google.com/drive/folders/1m83Z4_k2iYT3if3p-rO2Zl54SAF17HUC?usp=drive_link"]],"texto":"Toda vez que você vê alguém faturando mais do que você, crescendo mais rápido ou sendo chamado pro palco, você tá fazendo uma escolha.\n\nVocê tá escolhendo qual daqueles dois escaladores vai ser:\n\n1. **O que olha pra cima e reconhece o mérito:** Entende que se o outro chegou lá, o topo é sim possível. Ele usa o sucesso alheio como mapa e combustível pra acelerar a própria subida.\n\n2. **O que se limita a olhar de longe:** Fica só assistindo ao progresso dos outros como um mero espectador, achando que o resultado alheio é sorte ou algo inalcançável.\n\nVer alguém no topo não serve pra te diminuir. Serve pra te mostrar **o caminho**. É a prova viva de que o teto onde você acha que tá preso já foi ultrapassado por alguém.\n\nEm vez de ficar só admirando de longe quem tá chegando mais alto, escolhe ser o escalador que ajusta a pegada, foca na parede e sobe mais um metro.\n\nA montanha é gigante e tem espaço no topo pra todo mundo que tá disposto a fazer a força de escalar."},{"c":"threads","d":"2026-10-26","fase":"Captação","ideia":"4 hábitos","persona":"Gestor de tráfego","funil":"Meio","cta":"Sim","status":"Postado","formato":"Fio (7 partes)","texto":"**1/7** 🧵 Se você é gestor de tráfego e quer aumentar o seu faturamento, o segredo não é só subir mais campanhas. É mudar a forma como você vende e entrega valor.\n\nAqui estão os **4 hábitos práticos** para faturar mais a partir de hoje: 👇\n\n**2/7** ✅ **1. Fale com o cliente em R$ (não em métricas)**\n\nO dono do negócio não acorda pensando em CPM, CTR ou CPL. Ele quer saber: **quanto investiu e quantas vendas entraram**.\n\nQuando seu relatório mostra o custo real por venda, a percepção de valor muda e defender o seu preço fica muito mais fácil.\n\n**3/7** ✅ **2. Faça follow-up com quem não fechou**\n\nLembra daquele prospect que pediu proposta e sumiu? Ou que achou caro?\n\nSepare um dia do mês para reaproximar essas pessoas com um motivo novo ou uma oferta especial. Essa lista 'fria' é mina de ouro para fechar reuniões rápidas com quem já te conhece.\n\n**4/7** ✅ **3. Antecipe as oportunidades do cliente**\n\nNão espere o cliente pedir uma campanha nova. Chegue com a ideia pronta: • Datas comemorativas • Produtos encalhados no estoque • Ofertas sazonais\n\nAntecipar demandas é o que faz o cliente te ver como um sócio estratégico, e não apenas um prestador de serviço.\n\n**5/7** ✅ **4. Use a Black Friday para vender serviços adicionais**\n\nNa Black, o volume de leads dispara e a equipe do cliente trava. Vendas são perdidas por falta de atendimento rápido.\n\nEm vez de só buscar cliente novo, ofereça para a sua base atual uma solução de **automação no WhatsApp e follow-up automático**. Eles já confiam em você!\n\n**6/7** A boa notícia? Hoje você pode criar essas soluções com **Inteligência Artificial**, sem precisar programar nada.\n\nÉ exatamente isso que eu, o @rafaelmilagre e o @yagomartinsbr (do @viverdeia.ai) vamos te ensinar na prática.\n\n**7/7** 🚀 **Workshop Faturando com IA**\n\nComo encontrar gargalos nos seus clientes, criar soluções com IA e vendê-las para faturar mais.\n\n🗓️ **3, 4 e 5 de novembro | 19h30** 🎟️ 100% Gratuito\n\nGanta sua vaga clicando no link do perfil! 👊🏼"},{"c":"threads","d":"2026-10-27","fase":"Captação","ideia":"É melhor errar seguindo o próprio caminho do que acertar seguindo o caminho de outras pessoas.","persona":"Todas","funil":"Topo","cta":"Não","status":"Postado","texto":"É melhor errar seguindo o próprio caminho do que acertar seguindo o caminho de outras pessoas."},{"c":"threads","d":"2026-10-28","fase":"Captação","ideia":"Me falem uma coisa: como é que você está usando a inteligência artificial no seu dia a dia para faturar mais como prestador de serviço no digital?","persona":"Gestor de tráfego","funil":"Meio","cta":"","status":"Ideia","obs":"Ideia da tabela: \"Na sua operação hoje, a IA tá servindo de enfeite ou tá botando dinheiro no seu bolso? Quero ler os melhores exemplos nos comentários.\" Abaixo, o rascunho \"Exercício dos 3 gargalos\" (Opção 1), que está no documento na mesma data.","texto":"**1/6** Qual desses maiores problemas você vê nos negócios em que trabalha ou no seu próprio negócio?\n\n• Lead que demora horas para ser respondido\n\n• Alguém copiando informação de um sistema pro outro\n\n• Relatório semanal montado 100% na mão\n\n• Planilha que ninguém atualiza\n\n**3/6** Não precisa saber como resolver isso agora. Apenas identifique o gargalo. 📝\n\nA maioria dos profissionais olha para isso e vê \"rotina\". Quem entende de negócios olha para isso e vê **dinheiro sendo rasgado**.\n\n**4/6** No nosso Workshop, você vai aprender a olhar para esses problemas de outro jeito:\n\n1️⃣ Calcular exatamente quanto esse desperdício custa\n\n2️⃣ Resolver cada um com IA (sem saber programar)\n\n3️⃣ Transformar essa solução numa proposta comercial irrecusável\n\n**5/6** Mas para isso, você precisa estar ao vivo:\n\n📅 **03, 04 e 05 de Novembro**\n\n⏰ **Às 19h30**\n\n💻 **Ao vivo na Sala Secreta do Zoom** (sem replay!)\n\n**6/6** As vagas para a sala do Zoom são limitadas, então não deixa para a última hora.\n\n🔗 Garanta sua vaga no link do perfil e chegue cedo! 🚀"},{"c":"threads","d":"2026-10-29","fase":"Captação, dia do reality","ideia":"3 atalhos/ferramentas simples que economizam pelo menos 1 hora do meu dia de trabalho","persona":"Gestor de tráfego","funil":"Meio","cta":"Reality","status":"Texto pronto","formato":"Fio (6 partes)","obs":"Texto no documento com o título \"Quanto você perde\".","texto":"**🚨 Quanto custa para o seu cliente 1 hora de trabalho jogada fora por dia?**\n\nBora fazer uma conta rápida de padaria? 👇\n\n**1/6** Pensa no funcionário do seu cliente. Aquele que perde **1 hora por dia** preenchendo planilha manual e copiando dado de um sistema para o outro.\n\n**2/6** Parece pouco? Vamos aos números:\n\n**1h/dia** = 22 horas por mês.\n\nSe a hora desse colaborador custa **R$ 50** (contando salário, encargos, 13º e férias)...\n\nSão **R$ 1.100 jogados no lixo** todo mês.\n\n**3/6** Em 1 ano, a empresa gasta **R$ 13.200,00** em uma tarefa repetitiva que a Inteligência Artificial resolve em minutos.\n\nSua empresa tá literalmente pagando para alguém fazer trabalho de robô.\n\n**4/6** Agora me diz: se um especialista chegasse para esse empresário oferecendo uma solução pronta para esse problema por **R$ 2.000,00**, ele contrataria?\n\nLógico que sim. O investimento se paga em menos de 2 meses.\n\n**5/6** Repara que em nenhum momento eu falei de: ❌ Claude ❌ N8N ❌ Prompts avançados\n\nPorque o cliente **não quer comprar ferramenta**. Ele quer comprar **R$ 13 mil de economia por ano** e eficiência operacional.\n\n**6/6** Esse é só UM exemplo do que dá para implementar e vender para a sua base de clientes atual.\n\nPARE de vender código, técnica ou ferramentas. **Comece a vender LUCRO e TEMPO.** 💡"},{"c":"threads","d":"2026-10-30","fase":"Captação","ideia":"Meus NÃOS como gestor de tráfego","persona":"Gestor de tráfego","funil":"Meio","cta":"","status":"Ideia"},{"c":"threads","d":"2026-10-31","fase":"Captação","ideia":"Lista de filmes","persona":"Todas","funil":"Topo","cta":"","status":"Ideia","formato":"Formato Twitter","links":[["Referência","https://www.instagram.com/p/DepWCpWI_Ie/?img_index=1"]],"obs":"A confirmar: LinkedIn ou Threads e X."},{"c":"threads","d":"2026-11-02","fase":"Pré evento","ideia":"Gestor de tráfego não tem um dia de paz","persona":"Gestor de tráfego","funil":"Topo","objetivo":"Alcance","cta":"","status":"","links":[["Referência no Threads","https://www.threads.com/share/Fsy4ACpgw/"]],"obs":"02/11 é Finados e o documento diz que o dia fica sem post em todas as redes. Confirmar se este post entra."},{"c":"threads","d":"2026-11-03","fase":"Evento, aula 1","ideia":"","persona":"Dono de agência","funil":"Meio","objetivo":"Conversão","cta":"Workshop","status":"Texto pronto"},{"c":"threads","d":"2026-11-04","fase":"Evento, aula 2","ideia":"Repita comigo: usar IA para fazer 10x mais rápido o que você nem precisaria estar fazendo NÃO é ser produtivo.","persona":"Gestor de tráfego, Dono de agência","funil":"Meio","objetivo":"Retenção","cta":"","status":"Ideia"},{"c":"threads","d":"2026-11-05","fase":"Evento, aula 3 e abertura do carrinho","ideia":"Você nunca vai se sentir pronto, porque estar pronto não é um sentimento, é uma decisão.","persona":"Iniciante no digital","funil":"Topo","objetivo":"Alcance","cta":"","status":"Texto pronto"},{"c":"threads","d":"2026-11-06","fase":"Carrinho","ideia":"","persona":"Gestor de tráfego","funil":"Meio","objetivo":"Retenção","cta":"","status":"A definir"},{"c":"threads","d":"2026-11-07","fase":"Carrinho, dia do reality","ideia":"Quem não sabe o seu valor não consegue impor o seu preço","persona":"A definir","funil":"A definir","objetivo":"Alcance","cta":"","status":"A definir"},{"c":"threads","d":"2026-11-09","fase":"Carrinho","ideia":"","persona":"A definir","funil":"A definir","cta":"","status":"A definir"},{"c":"threads","d":"2026-11-10","fase":"Carrinho","ideia":"","persona":"A definir","funil":"A definir","cta":"","status":"A definir"},{"c":"threads","d":"2026-11-11","fase":"Carrinho","ideia":"","persona":"A definir","funil":"A definir","cta":"","status":"A definir"},{"c":"threads","d":"2026-11-12","fase":"Carrinho","ideia":"","persona":"A definir","funil":"A definir","cta":"","status":"A definir"},{"c":"threads","d":"2026-11-13","fase":"Carrinho","ideia":"","persona":"A definir","funil":"A definir","cta":"","status":"A definir"},{"c":"threads","d":"2026-11-14","fase":"Carrinho","ideia":"","persona":"A definir","funil":"A definir","cta":"","status":"A definir"},{"c":"blog","d":"2026-10-27","fase":"Captação","tipo":"Com CTA","ideia":"Quanto investir em tráfego pago para começar? Focado em SEO","persona":"Iniciante no digital","funil":"Topo","cta":"Captação","status":"Pronto","links":[["Texto do post","https://docs.google.com/document/d/1rNjwizSD9y85NOZVc-Suh7yS317ixb8g_Pz9mzRMKm0/edit?tab=t.0#heading=h.o8xzeboc4xq0"]]},{"c":"blog","d":"2026-10-29","fase":"Captação, dia do reality","tipo":"Com CTA","ideia":"Como fazer anúncios para clínicas de estética? Com como aplicar IA na prática","persona":"Gestor de tráfego","funil":"Meio","cta":"Captação","status":"Pronto","links":[["Texto do post","https://docs.google.com/document/d/1-HPm96uCFBaYK63hBfRHOniqOjS5s6oYpqA_rWnF9J4/edit?usp=sharing"]]},{"c":"blog","d":"2026-10-30","fase":"Captação","tipo":"Com CTA","ideia":"Como ganhar dinheiro com inteligência artificial: serviços que as agências podem vender.","persona":"Dono de agência, Gestor de tráfego","funil":"Meio","cta":"Captação","status":"Pronto","links":[["Texto do post","https://docs.google.com/document/d/11OBLxJzk3OhUph51xhd_VrhpRddGJWss6zHYbu983ss/edit?usp=sharing"]]},{"c":"blog","d":"2026-11-03","fase":"Evento, aula 1","tipo":"Com CTA","ideia":"Chat GPT para empresas: 7 tarefas que você pode automatizar hoje.","persona":"Dono de agência","funil":"Topo","cta":"Sim","status":"Pronto","links":[["Texto do post","https://docs.google.com/document/d/1hX7PDhRXUzeEsrtt4P7yuLqADi6pIeqYGtDNH0AgsHo/edit?tab=t.0"]]},{"c":"blog","d":"2026-11-05","fase":"Evento, aula 3 e abertura do carrinho","tipo":"Com CTA","ideia":"O futuro do mercado digital com a IA","persona":"Todas","funil":"Topo","cta":"Sim","status":"Pronto","links":[["Texto do post","https://docs.google.com/document/d/1_lBncVTsVxxmb2u-T9XDixRc3EJ4LwKoo2bvIyYvp9E/edit?usp=sharing"]]},{"c":"blog","d":"2026-11-10","fase":"Carrinho","tipo":"Com CTA","ideia":"Como usar IA para criar anúncios: textos, criativos e testes.","persona":"Gestor de tráfego","funil":"Fundo","cta":"Sim","status":"Pronto","links":[["Texto do post","https://docs.google.com/document/d/1XiKOoH0GW-G7CFOzWwcrQSFiHe9T7bxAHLmMi8f6myQ/edit?usp=sharing"]]},{"c":"blog","d":"2026-11-12","fase":"Carrinho","tipo":"Sem CTA","ideia":"Criando landing pages de alta conversão com IA (passo a passo prático)","persona":"Gestor de tráfego","funil":"Meio","cta":"Não","status":"Em produção","links":[["Referência","https://studio.youtube.com/video/-cheAbWJ4Z4/edit"]]},{"c":"blog","d":"2026-11-13","fase":"Carrinho","tipo":"Sem CTA","ideia":"Remarketing na Black Friday: Como Recuperar Clientes e Aumentar as Vendas","persona":"Gestor de tráfego","funil":"Meio","cta":"Não","status":"Em produção"},{"c":"comunidade","d":null,"semana":0,"fase":"Captação","tipo":"Com CTA","ideia":"Ilustração chamando pra Live","persona":"Todas","funil":"Meio","cta":"Sim","status":"Ideia"},{"c":"comunidade","d":"2026-10-29","fase":"Captação, dia do reality","tipo":"Com CTA","ideia":"Chamar para o reality","persona":"Todas","funil":"Meio","cta":"Reality","status":"Ideia"},{"c":"comunidade","d":null,"semana":1,"fase":"Evento e carrinho","tipo":"Com CTA","ideia":"Chamada para o evento","persona":"Todas","funil":"Meio","cta":"Sim","status":"Ideia"},{"c":"comunidade","d":null,"semana":1,"fase":"Evento e carrinho","tipo":"Sem CTA","ideia":"Frase","persona":"Todas","funil":"Topo","cta":"Não","status":"Ideia"},{"c":"comunidade","d":null,"semana":2,"fase":"Carrinho","tipo":"Com CTA","ideia":"Post de inscrições abertas","persona":"Todas","funil":"Fundo","cta":"Sim","status":"Ideia"},{"c":"comunidade","d":null,"semana":2,"fase":"Carrinho","tipo":"Sem CTA","ideia":"Frase","persona":"Todas","funil":"Topo","cta":"Não","status":"Ideia"}]}</script>
+<script id="app">
 (() => {
   'use strict';
 
@@ -399,298 +459,132 @@
     return 'definir';
   };
 
-  // ---------- posts (do documento WFIA v3.1) ----------
-  const P = [
-    // ===== LinkedIn =====
-    { c:'linkedin', d:'2026-10-26', fase:'Captação', ideia:'Especialista em IA: toda agência vai precisar desse crachá.', persona:'Dono de agência', funil:'Meio', cta:'Evento', status:'Postado',
-      links:[['Post publicado','https://lnkd.in/p/dwR8x_Nd'],['Referência','https://www.instagram.com/p/Deu2O7mI4Bh/?img_index=3']],
-      texto:`A Exame acabou de postar que 𝗮𝘀 𝘃𝗮𝗴𝗮𝘀 𝗾𝘂𝗲 𝗲𝘅𝗶𝗴𝗲𝗺 𝗜𝗔 𝗾𝘂𝗮𝘀𝗲 𝘁𝗿𝗶𝗽𝗹𝗶𝗰𝗮𝗿𝗮𝗺 𝗻𝗼 𝗕𝗿𝗮𝘀𝗶𝗹.
-
-Mas se você é dono de agência, não olhe para essa notícia achando que é só sobre "emprego".
-
-Isso é o mercado gritando que as empresas estão desesperadas por eficiência e buscando 𝗽𝗿𝗼𝗳𝗶𝘀𝘀𝗶𝗼𝗻𝗮𝗶𝘀 𝗾𝘂𝗲 𝘀𝗮𝗶𝗯𝗮𝗺 𝗮𝗽𝗹𝗶𝗰𝗮𝗿 𝗮 𝘁𝗲𝗰𝗻𝗼𝗹𝗼𝗴𝗶𝗮 𝗻𝗼 𝗱𝗶𝗮 𝗮 𝗱𝗶𝗮 𝗰𝗼𝗺 𝘀𝗲𝗻𝘀𝗼 𝗰𝗿𝗶́𝘁𝗶𝗰𝗼 𝗲 𝘃𝗶𝘀𝗮̃𝗼 𝗱𝗲 𝗻𝗲𝗴𝗼́𝗰𝗶𝗼.
-
-E se as empresas estão buscando isso, a sua agência tem 𝗱𝘂𝗮𝘀 𝗲𝘀𝗰𝗼𝗹𝗵𝗮𝘀: ou você forma esse profissional para oferecer esse serviço antes da concorrência, ou vai ver seus clientes contratando isso de fora.
-
-Mas eu não tô falando de alguém que é mestre em Claude Code, Open Claw, N8N, que sabe tudo de token e de API.
-
-Eu tô falando de um profissional que consegue fazer 𝗕𝗘𝗠 𝗲𝘀𝘀𝗮𝘀 𝟯 𝗰𝗼𝗶𝘀𝗮𝘀:
-
-𝟭. Olhar pra uma empresa e ver quais são os 𝗽𝗿𝗼𝗯𝗹𝗲𝗺𝗮𝘀 𝗿𝗲𝗮𝗶𝘀 que vale a pena resolver com IA.
-
-𝟮. 𝗗𝗲𝘀𝗲𝗻𝘃𝗼𝗹𝘃𝗲𝗿 𝘀𝗼𝗹𝘂𝗰̧𝗼̃𝗲𝘀 para esses problemas usando inteligência artificial, é claro.
-
-𝟯. E, o mais importante, conseguir 𝗩𝗘𝗡𝗗𝗘𝗥 𝗲𝘀𝘀𝗮𝘀 𝘀𝗼𝗹𝘂𝗰̧𝗼̃𝗲𝘀 para todo tipo de negócio.
-
-𝗔𝘀 𝗲𝗺𝗽𝗿𝗲𝘀𝗮𝘀 𝗾𝘂𝗲𝗿𝗲𝗺 𝗰𝗼𝗺𝗽𝗿𝗮𝗿 𝗮 𝘀𝗼𝗹𝘂𝗰̧𝗮̃𝗼 𝗱𝗼 𝗽𝗿𝗼𝗯𝗹𝗲𝗺𝗮 𝗱𝗲𝗹𝗮𝘀. E a agência que souber entregar essa ponta vai dominar o mercado nos próximos anos.
-
-Só que esse profissional completo ainda quase não existe no mercado.
-
-E é por isso que eu e o time do Viver de IA nos unimos nessa Black para 𝗙𝗢𝗥𝗠𝗔𝗥 esse profissional, seja para você colocar dentro da sua operação ou para você mesmo se tornar essa referência.
-
-O lançamento oficial vai ser em uma imersão intensiva de trabalho e mão na massa, o 𝗪𝗢𝗥𝗞𝗦𝗛𝗢𝗣 𝗙𝗔𝗧𝗨𝗥𝗔𝗡𝗗𝗢 𝗖𝗢𝗠 𝗜𝗔.
-
-Nós vamos te mostrar na prática como 𝗺𝗮𝗽𝗲𝗮𝗿, 𝗶𝗺𝗽𝗹𝗲𝗺𝗲𝗻𝘁𝗮𝗿 𝗲 𝘃𝗲𝗻𝗱𝗲𝗿 𝘀𝗼𝗹𝘂𝗰̧𝗼̃𝗲𝘀 𝗰𝗼𝗺 𝗜𝗔 para qualquer tipo de empresa.
-
-É um novo serviço para a sua agência ganhar dinheiro e abrir portas que hoje estão fechadas, mas também é uma nova forma de organizar a sua própria operação, para fazer muito mais com menos recursos usando inteligência artificial.` },
-    { c:'linkedin', d:'2026-10-28', fase:'Captação', ideia:'', persona:'A definir', funil:'Topo', cta:'Não', status:'Agendado',
-      links:[['Referência','https://www.instagram.com/p/DezB3rODkm0/?img_index=2']] },
-    { c:'linkedin', d:'2026-10-29', fase:'Captação, dia do reality', ideia:'Newsletter sobre a empresa de um trilhão de dólares.', persona:'Dono de agência, Gestor de tráfego', funil:'Topo', cta:'Não', status:'Agendado', formato:'Newsletter' },
-    { c:'linkedin', d:'2026-10-30', fase:'Captação', ideia:'', persona:'A definir', funil:'Meio', cta:'Evento', status:'Agendado',
-      links:[['Referência','https://www.instagram.com/p/De6t1eyHD6i/']] },
-    { c:'linkedin', d:'2026-11-03', fase:'Evento, aula 1', ideia:'A frase mais perigosa: "sempre foi assim"', persona:'Dono de agência, Gestor de tráfego', funil:'Meio', objetivo:'Conversão', formato:'Foto + texto', cta:'Evento', status:'Feito',
-      links:[['Referência','https://www.linkedin.com/posts/ana-paula-longhini_sempre-foi-assim-talvez-essa-seja-uma-share-7415762594671726592-6qXa/']],
-      texto:`Essa é a narrativa perfeita que as pessoas inventam para justificar a própria incapacidade de melhorar as coisas, de se atualizar e de sair do lugar. É a desculpa oficial para a paralisação.
-
-Só que no mercado digital, essa frase é ainda mais perigosa. Aqui, as coisas não mudam em anos, mas em semanas.
-
-Há mais de 9 anos formando gestores de tráfego, eu já vi de tudo. Mas o que está acontecendo agora é, sem dúvida, a maior curva de mudança da história da nossa profissão: a Inteligência Artificial.
-
-Apesar disso, eu vejo muita gente ainda cruzando os braços e se negando a aprender a usar IA de verdade.
-
-E quando eu digo "de verdadade", não estou falando de pedir para uma ferramenta escrever um textinho bonitinho para o Instagram ou gerar uma imagem aleatória.
-
-Estou falando de **pegar a inteligência artificial para resolver problemas reais de empresas**.
-
-Para criar atendentes no WhatsApp que convertem mais que humanos, automatizar processos comerciais, estruturar CRMs e salvar negócios que estão perdendo dinheiro por lentidão. Quem aprende a fazer isso cobra caro. Quem continua ignorando, fica para trás.
-
-O jogo mudou. Continuar fazendo as coisas do mesmo jeito só porque "sempre foi assim" vai te deixar fora do mercado.
-
-Quer virar esse jogo?
-
-Começa hoje.
-
-Nosso **Workshop Faturando com IA** começa hoje, e eu vou te mostrar o passo a passo prático para você dominar essas soluções e começar a faturar com isso.
-
-As vagas na sala são limitadas e não vai ter replay.
-
-Clica no link dos comentários ou da minha bio para garantir seu lugar agora. Bora para cima!` },
-    { c:'linkedin', d:'2026-11-04', fase:'Evento, aula 2', ideia:'Não foi sorte, você é bom mesmo.', persona:'Todas', funil:'Topo', objetivo:'Alcance', formato:'Foto + texto', cta:'Evento', status:'Feito',
-      links:[['Referência','https://www.instagram.com/p/DemARs-ib0s/']],
-      obs:'No documento a linha aparece como "qui 04/11". A data 04/11 cai numa quarta, e a frequência da semana (ter, qua, sex) confirma a quarta.',
-      texto:`Você passou na prova, conseguiu a vaga, resolveu o problema que ninguém resolvia, e a primeira coisa que pensou foi "dei sorte".
-
-A gente costuma explicar o próprio resultado como acaso e o resultado dos outros como mérito.
-
-Se deu certo, foi porque você estudou, se preparou, insistiu quando dava vontade de largar. Isso é seu.` },
-    { c:'linkedin', d:'2026-11-06', fase:'Carrinho', ideia:'Newsletter: Como ganhar dinheiro com inteligência artificial em 2026: 7 serviços que empresas já estão pagando', persona:'Gestor de tráfego, Dono de agência', funil:'Fundo', objetivo:'Conversão', formato:'Newsletter', cta:'Vendas', status:'Feito',
-      links:[['Texto da newsletter','https://docs.google.com/document/d/1GT1XdUyBTZOnmRkBWmnBMuTxPWTl1pzwD3B33HUsVy0/edit?tab=t.0#heading=h.e88uewzgghdt']] },
-    { c:'linkedin', d:'2026-11-09', fase:'Carrinho', ideia:'Eu vendo dinheiro.', persona:'Gestor de tráfego', funil:'Fundo', cta:'', status:'Referência',
-      links:[['Referência','https://www.instagram.com/p/DeH4SfMIzUv/?img_index=1']],
-      obs:'O CTA final ainda está com "xxxx" no lugar do nome da oferta.',
-      texto:`Eu vendo dinheiro. E você, gestor de tráfego, também.
-
-Isso tem que estar na ponta da língua. O anúncio é só o meio. O que você entrega pro cliente é consulta marcada na clínica, mesa cheia no restaurante, fila de encomenda no e-commerce, carrinho de compras lotado.
-
-Quando você sobe uma campanha no Meta Ads ou no Google Ads, o que você está fazendo de verdade é colocar mais dinheiro no bolso do cliente. Você aumenta o faturamento dele e faz o negócio crescer.
-
-E quando você entende isso e fica bom em entregar esse resultado, vai por mim: chove gente querendo te contratar. Você vira um profissional muito valorizado, quase indispensável.
-
-Foi assim que eu fiz meu primeiro milhão como gestor de tráfego. Eu não tinha berço de ouro, não terminei a faculdade e não vendia curso. Era só prestação de serviço.
-
-Hoje, antes dos 30, eu tenho coisas que eu nem sonhava ter aos 70.
-
-Vendendo dinheiro, eu conquistei a liberdade pra viver a vida que eu sempre quis e consegui realizar os meus sonhos e os de quem eu amo. E é vendendo dinheiro que a gente, gestor de tráfego, muda a vida de muita gente.
-
-Se você quer virar esse jogo de verdade e aprender a vender dinheiro na prática, **as inscrições para a xxxx**
-
-As vagas são limitadas e as condições especiais não vão durar muito tempo.
-
-Clica no link da bio e garante o seu lugar agora mesmo!` },
-    { c:'linkedin', d:'2026-11-11', fase:'Carrinho', ideia:'Newsletter: Você não vai perder seu emprego para a IA. Vai perder para alguém que usa IA', persona:'A definir', funil:'A definir', cta:'', status:'A definir', formato:'Newsletter',
-      obs:'Adaptar post do blog.' },
-    { c:'linkedin', d:'2026-11-13', fase:'Carrinho', ideia:'Escalada.', persona:'Todas', funil:'Topo', cta:'', status:'Referência', formato:'Carrossel com imagens',
-      links:[['Referência','https://www.instagram.com/p/Degz8VAkaml/?img_index=1'],['Imagens do carrossel (Drive)','https://drive.google.com/drive/folders/1m83Z4_k2iYT3if3p-rO2Zl54SAF17HUC?usp=drive_link']],
-      texto:`Toda vez que você vê alguém faturando mais do que você, crescendo mais rápido ou sendo chamado pro palco, você tá fazendo uma escolha.
-
-Você tá escolhendo qual daqueles dois escaladores vai ser:
-
-1. **O que olha pra cima e reconhece o mérito:** Entende que se o outro chegou lá, o topo é sim possível. Ele usa o sucesso alheio como mapa e combustível pra acelerar a própria subida.
-
-2. **O que se limita a olhar de longe:** Fica só assistindo ao progresso dos outros como um mero espectador, achando que o resultado alheio é sorte ou algo inalcançável.
-
-Ver alguém no topo não serve pra te diminuir. Serve pra te mostrar **o caminho**. É a prova viva de que o teto onde você acha que tá preso já foi ultrapassado por alguém.
-
-Em vez de ficar só admirando de longe quem tá chegando mais alto, escolhe ser o escalador que ajusta a pegada, foca na parede e sobe mais um metro.
-
-A montanha é gigante e tem espaço no topo pra todo mundo que tá disposto a fazer a força de escalar.` },
-
-    // ===== Threads e X =====
-    { c:'threads', d:'2026-10-26', fase:'Captação', ideia:'4 hábitos', persona:'Gestor de tráfego', funil:'Meio', cta:'Sim', status:'Postado', formato:'Fio (7 partes)',
-      texto:`**1/7** 🧵 Se você é gestor de tráfego e quer aumentar o seu faturamento, o segredo não é só subir mais campanhas. É mudar a forma como você vende e entrega valor.
-
-Aqui estão os **4 hábitos práticos** para faturar mais a partir de hoje: 👇
-
-**2/7** ✅ **1. Fale com o cliente em R$ (não em métricas)**
-
-O dono do negócio não acorda pensando em CPM, CTR ou CPL. Ele quer saber: **quanto investiu e quantas vendas entraram**.
-
-Quando seu relatório mostra o custo real por venda, a percepção de valor muda e defender o seu preço fica muito mais fácil.
-
-**3/7** ✅ **2. Faça follow-up com quem não fechou**
-
-Lembra daquele prospect que pediu proposta e sumiu? Ou que achou caro?
-
-Separe um dia do mês para reaproximar essas pessoas com um motivo novo ou uma oferta especial. Essa lista 'fria' é mina de ouro para fechar reuniões rápidas com quem já te conhece.
-
-**4/7** ✅ **3. Antecipe as oportunidades do cliente**
-
-Não espere o cliente pedir uma campanha nova. Chegue com a ideia pronta: • Datas comemorativas • Produtos encalhados no estoque • Ofertas sazonais
-
-Antecipar demandas é o que faz o cliente te ver como um sócio estratégico, e não apenas um prestador de serviço.
-
-**5/7** ✅ **4. Use a Black Friday para vender serviços adicionais**
-
-Na Black, o volume de leads dispara e a equipe do cliente trava. Vendas são perdidas por falta de atendimento rápido.
-
-Em vez de só buscar cliente novo, ofereça para a sua base atual uma solução de **automação no WhatsApp e follow-up automático**. Eles já confiam em você!
-
-**6/7** A boa notícia? Hoje você pode criar essas soluções com **Inteligência Artificial**, sem precisar programar nada.
-
-É exatamente isso que eu, o @rafaelmilagre e o @yagomartinsbr (do @viverdeia.ai) vamos te ensinar na prática.
-
-**7/7** 🚀 **Workshop Faturando com IA**
-
-Como encontrar gargalos nos seus clientes, criar soluções com IA e vendê-las para faturar mais.
-
-🗓️ **3, 4 e 5 de novembro | 19h30** 🎟️ 100% Gratuito
-
-Ganta sua vaga clicando no link do perfil! 👊🏼` },
-    { c:'threads', d:'2026-10-27', fase:'Captação', ideia:'É melhor errar seguindo o próprio caminho do que acertar seguindo o caminho de outras pessoas.', persona:'Todas', funil:'Topo', cta:'Não', status:'Postado',
-      texto:`É melhor errar seguindo o próprio caminho do que acertar seguindo o caminho de outras pessoas.` },
-    { c:'threads', d:'2026-10-28', fase:'Captação', ideia:'Me falem uma coisa: como é que você está usando a inteligência artificial no seu dia a dia para faturar mais como prestador de serviço no digital?', persona:'Gestor de tráfego', funil:'Meio', cta:'', status:'Ideia',
-      obs:'Ideia da tabela: "Na sua operação hoje, a IA tá servindo de enfeite ou tá botando dinheiro no seu bolso? Quero ler os melhores exemplos nos comentários." Abaixo, o rascunho "Exercício dos 3 gargalos" (Opção 1), que está no documento na mesma data.',
-      texto:`**1/6** Qual desses maiores problemas você vê nos negócios em que trabalha ou no seu próprio negócio?
-
-• Lead que demora horas para ser respondido
-
-• Alguém copiando informação de um sistema pro outro
-
-• Relatório semanal montado 100% na mão
-
-• Planilha que ninguém atualiza
-
-**3/6** Não precisa saber como resolver isso agora. Apenas identifique o gargalo. 📝
-
-A maioria dos profissionais olha para isso e vê "rotina". Quem entende de negócios olha para isso e vê **dinheiro sendo rasgado**.
-
-**4/6** No nosso Workshop, você vai aprender a olhar para esses problemas de outro jeito:
-
-1️⃣ Calcular exatamente quanto esse desperdício custa
-
-2️⃣ Resolver cada um com IA (sem saber programar)
-
-3️⃣ Transformar essa solução numa proposta comercial irrecusável
-
-**5/6** Mas para isso, você precisa estar ao vivo:
-
-📅 **03, 04 e 05 de Novembro**
-
-⏰ **Às 19h30**
-
-💻 **Ao vivo na Sala Secreta do Zoom** (sem replay!)
-
-**6/6** As vagas para a sala do Zoom são limitadas, então não deixa para a última hora.
-
-🔗 Garanta sua vaga no link do perfil e chegue cedo! 🚀` },
-    { c:'threads', d:'2026-10-29', fase:'Captação, dia do reality', ideia:'3 atalhos/ferramentas simples que economizam pelo menos 1 hora do meu dia de trabalho', persona:'Gestor de tráfego', funil:'Meio', cta:'Reality', status:'Texto pronto', formato:'Fio (6 partes)',
-      obs:'Texto no documento com o título "Quanto você perde".',
-      texto:`**🚨 Quanto custa para o seu cliente 1 hora de trabalho jogada fora por dia?**
-
-Bora fazer uma conta rápida de padaria? 👇
-
-**1/6** Pensa no funcionário do seu cliente. Aquele que perde **1 hora por dia** preenchendo planilha manual e copiando dado de um sistema para o outro.
-
-**2/6** Parece pouco? Vamos aos números:
-
-**1h/dia** = 22 horas por mês.
-
-Se a hora desse colaborador custa **R$ 50** (contando salário, encargos, 13º e férias)...
-
-São **R$ 1.100 jogados no lixo** todo mês.
-
-**3/6** Em 1 ano, a empresa gasta **R$ 13.200,00** em uma tarefa repetitiva que a Inteligência Artificial resolve em minutos.
-
-Sua empresa tá literalmente pagando para alguém fazer trabalho de robô.
-
-**4/6** Agora me diz: se um especialista chegasse para esse empresário oferecendo uma solução pronta para esse problema por **R$ 2.000,00**, ele contrataria?
-
-Lógico que sim. O investimento se paga em menos de 2 meses.
-
-**5/6** Repara que em nenhum momento eu falei de: ❌ Claude ❌ N8N ❌ Prompts avançados
-
-Porque o cliente **não quer comprar ferramenta**. Ele quer comprar **R$ 13 mil de economia por ano** e eficiência operacional.
-
-**6/6** Esse é só UM exemplo do que dá para implementar e vender para a sua base de clientes atual.
-
-PARE de vender código, técnica ou ferramentas. **Comece a vender LUCRO e TEMPO.** 💡` },
-    { c:'threads', d:'2026-10-30', fase:'Captação', ideia:'Meus NÃOS como gestor de tráfego', persona:'Gestor de tráfego', funil:'Meio', cta:'', status:'Ideia' },
-    { c:'threads', d:'2026-10-31', fase:'Captação', ideia:'Lista de filmes', persona:'Todas', funil:'Topo', cta:'', status:'Ideia', formato:'Formato Twitter',
-      links:[['Referência','https://www.instagram.com/p/DepWCpWI_Ie/?img_index=1']],
-      obs:'A confirmar: LinkedIn ou Threads e X.' },
-    { c:'threads', d:'2026-11-02', fase:'Pré evento', ideia:'Gestor de tráfego não tem um dia de paz', persona:'Gestor de tráfego', funil:'Topo', objetivo:'Alcance', cta:'', status:'',
-      links:[['Referência no Threads','https://www.threads.com/share/Fsy4ACpgw/']],
-      obs:'02/11 é Finados e o documento diz que o dia fica sem post em todas as redes. Confirmar se este post entra.' },
-    { c:'threads', d:'2026-11-03', fase:'Evento, aula 1', ideia:'', persona:'Dono de agência', funil:'Meio', objetivo:'Conversão', cta:'Workshop', status:'Texto pronto' },
-    { c:'threads', d:'2026-11-04', fase:'Evento, aula 2', ideia:'Repita comigo: usar IA para fazer 10x mais rápido o que você nem precisaria estar fazendo NÃO é ser produtivo.', persona:'Gestor de tráfego, Dono de agência', funil:'Meio', objetivo:'Retenção', cta:'', status:'Ideia' },
-    { c:'threads', d:'2026-11-05', fase:'Evento, aula 3 e abertura do carrinho', ideia:'Você nunca vai se sentir pronto, porque estar pronto não é um sentimento, é uma decisão.', persona:'Iniciante no digital', funil:'Topo', objetivo:'Alcance', cta:'', status:'Texto pronto' },
-    { c:'threads', d:'2026-11-06', fase:'Carrinho', ideia:'', persona:'Gestor de tráfego', funil:'Meio', objetivo:'Retenção', cta:'', status:'A definir' },
-    { c:'threads', d:'2026-11-07', fase:'Carrinho, dia do reality', ideia:'Quem não sabe o seu valor não consegue impor o seu preço', persona:'A definir', funil:'A definir', objetivo:'Alcance', cta:'', status:'A definir' },
-    ...['09','10','11','12','13','14'].map(dd => ({ c:'threads', d:`2026-11-${dd}`, fase:'Carrinho', ideia:'', persona:'A definir', funil:'A definir', cta:'', status:'A definir' })),
-
-    // ===== Blog Subido =====
-    { c:'blog', d:'2026-10-27', fase:'Captação', tipo:'Com CTA', ideia:'Quanto investir em tráfego pago para começar? Focado em SEO', persona:'Iniciante no digital', funil:'Topo', cta:'Captação', status:'Pronto',
-      links:[['Texto do post','https://docs.google.com/document/d/1rNjwizSD9y85NOZVc-Suh7yS317ixb8g_Pz9mzRMKm0/edit?tab=t.0#heading=h.o8xzeboc4xq0']] },
-    { c:'blog', d:'2026-10-29', fase:'Captação, dia do reality', tipo:'Com CTA', ideia:'Como fazer anúncios para clínicas de estética? Com como aplicar IA na prática', persona:'Gestor de tráfego', funil:'Meio', cta:'Captação', status:'Pronto',
-      links:[['Texto do post','https://docs.google.com/document/d/1-HPm96uCFBaYK63hBfRHOniqOjS5s6oYpqA_rWnF9J4/edit?usp=sharing']] },
-    { c:'blog', d:'2026-10-30', fase:'Captação', tipo:'Com CTA', ideia:'Como ganhar dinheiro com inteligência artificial: serviços que as agências podem vender.', persona:'Dono de agência, Gestor de tráfego', funil:'Meio', cta:'Captação', status:'Pronto',
-      links:[['Texto do post','https://docs.google.com/document/d/11OBLxJzk3OhUph51xhd_VrhpRddGJWss6zHYbu983ss/edit?usp=sharing']] },
-    { c:'blog', d:'2026-11-03', fase:'Evento, aula 1', tipo:'Com CTA', ideia:'Chat GPT para empresas: 7 tarefas que você pode automatizar hoje.', persona:'Dono de agência', funil:'Topo', cta:'Sim', status:'Pronto',
-      links:[['Texto do post','https://docs.google.com/document/d/1hX7PDhRXUzeEsrtt4P7yuLqADi6pIeqYGtDNH0AgsHo/edit?tab=t.0']] },
-    { c:'blog', d:'2026-11-05', fase:'Evento, aula 3 e abertura do carrinho', tipo:'Com CTA', ideia:'O futuro do mercado digital com a IA', persona:'Todas', funil:'Topo', cta:'Sim', status:'Pronto',
-      links:[['Texto do post','https://docs.google.com/document/d/1_lBncVTsVxxmb2u-T9XDixRc3EJ4LwKoo2bvIyYvp9E/edit?usp=sharing']] },
-    { c:'blog', d:'2026-11-10', fase:'Carrinho', tipo:'Com CTA', ideia:'Como usar IA para criar anúncios: textos, criativos e testes.', persona:'Gestor de tráfego', funil:'Fundo', cta:'Sim', status:'Pronto',
-      links:[['Texto do post','https://docs.google.com/document/d/1XiKOoH0GW-G7CFOzWwcrQSFiHe9T7bxAHLmMi8f6myQ/edit?usp=sharing']] },
-    { c:'blog', d:'2026-11-12', fase:'Carrinho', tipo:'Sem CTA', ideia:'Criando landing pages de alta conversão com IA (passo a passo prático)', persona:'Gestor de tráfego', funil:'Meio', cta:'Não', status:'Em produção',
-      links:[['Referência','https://studio.youtube.com/video/-cheAbWJ4Z4/edit']] },
-    { c:'blog', d:'2026-11-13', fase:'Carrinho', tipo:'Sem CTA', ideia:'Remarketing na Black Friday: Como Recuperar Clientes e Aumentar as Vendas', persona:'Gestor de tráfego', funil:'Meio', cta:'Não', status:'Em produção' },
-
-    // ===== Comunidade do YouTube =====
-    { c:'comunidade', d:null, semana:0, fase:'Captação', tipo:'Com CTA', ideia:'Ilustração chamando pra Live', persona:'Todas', funil:'Meio', cta:'Sim', status:'Ideia' },
-    { c:'comunidade', d:'2026-10-29', fase:'Captação, dia do reality', tipo:'Com CTA', ideia:'Chamar para o reality', persona:'Todas', funil:'Meio', cta:'Reality', status:'Ideia' },
-    { c:'comunidade', d:null, semana:1, fase:'Evento e carrinho', tipo:'Com CTA', ideia:'Chamada para o evento', persona:'Todas', funil:'Meio', cta:'Sim', status:'Ideia' },
-    { c:'comunidade', d:null, semana:1, fase:'Evento e carrinho', tipo:'Sem CTA', ideia:'Frase', persona:'Todas', funil:'Topo', cta:'Não', status:'Ideia' },
-    { c:'comunidade', d:null, semana:2, fase:'Carrinho', tipo:'Com CTA', ideia:'Post de inscrições abertas', persona:'Todas', funil:'Fundo', cta:'Sim', status:'Ideia' },
-    { c:'comunidade', d:null, semana:2, fase:'Carrinho', tipo:'Sem CTA', ideia:'Frase', persona:'Todas', funil:'Topo', cta:'Não', status:'Ideia' },
-  ];
+  // ---------- dados ----------
+  // A página como foi escrita, capturada antes de qualquer render. É a base para salvar.
+  const TEMPLATE = (() => {
+    const app = document.getElementById('app');
+    let s = '';
+    for (const n of document.body.childNodes) {
+      if (n.nodeType === 1) s += n.outerHTML;
+      else if (n.nodeType === 3) s += n.textContent.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[m]));
+      else if (n.nodeType === 8) s += '<!--' + n.data + '-->';
+      if (n === app) break;
+    }
+    return s;
+  })();
+  const RESET = ':root{color-scheme:light;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0;font:14px system-ui,-apple-system,sans-serif}img{max-width:100%}[hidden]{display:none!important}';
+  const CAMPOS = ['c','d','semana','fase','tipo','ideia','persona','funil','objetivo','formato','cta','status','links','obs','texto'];
+
+  function lerEmbutido(){
+    try {
+      const x = JSON.parse(document.getElementById('dados').textContent);
+      return Array.isArray(x) ? { perfil:'Pedro Sobral', posts:x } : { perfil:x.perfil || 'Pedro Sobral', posts:x.posts || [] };
+    } catch(e){ return { perfil:'Pedro Sobral', posts:[] }; }
+  }
+  const EMBUTIDO_TXT = document.getElementById('dados').textContent;
+  let assinatura = 0; for (let k = 0; k < EMBUTIDO_TXT.length; k++) assinatura = (assinatura * 31 + EMBUTIDO_TXT.charCodeAt(k)) | 0;
+  const LS = 'wfia-calendario:' + assinatura;
+
+  let base = lerEmbutido();
+  let PERFIL = base.perfil;
+  let P = base.posts;
+
+  const limpo = p => { const o = {}; CAMPOS.forEach(k => { const v = p[k]; if (v !== undefined && v !== '' && !(Array.isArray(v) && !v.length)) o[k] = v; }); if (!('d' in o)) o.d = null; return o; };
+  const estado = () => ({ perfil:PERFIL, posts:P.map(limpo) });
+
+  function documento(){
+    const dados = JSON.stringify(estado()).replace(/</g,'\\u003c');
+    const ini = '<script type="application/json" id="dados">';
+    const a = TEMPLATE.indexOf(ini), b = TEMPLATE.indexOf('</' + 'script>', a);
+    const corpo = TEMPLATE.slice(0, a + ini.length) + dados + TEMPLATE.slice(b);
+    return '<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>' + RESET + '</style></head><body>' + corpo + '</body></html>';
+  }
+
+  // modo: 'iniciando' | 'artifact' (salva para todos) | 'leitura' | 'local' (arquivo aberto no computador)
+  let modo = (window.claude && typeof window.claude.use === 'function') ? 'iniciando' : 'local';
+  let artifactNs = null, sujo = false, salvando = false;
+
+  if (modo === 'local') {
+    try {
+      const salvo = JSON.parse(localStorage.getItem(LS) || 'null');
+      if (salvo && Array.isArray(salvo.posts)) { P = salvo.posts; PERFIL = salvo.perfil || PERFIL; }
+    } catch(e){}
+  }
+  const podeEditar = () => modo === 'artifact' || modo === 'local';
+
+  function mudou(){
+    if (modo === 'local') {
+      try { localStorage.setItem(LS, JSON.stringify(estado())); } catch(e){ toast('Não consegui salvar neste navegador. Baixe o HTML para não perder as edições.'); }
+    } else sujo = true;
+    renderBarra();
+  }
+
+  async function salvar(){
+    if (modo !== 'artifact' || !artifactNs || salvando) return;
+    salvando = true; renderBarra();
+    try { if (atual !== null) sessionStorage.setItem('wfia-reabrir', String(atual)); } catch(e){}
+    try {
+      await artifactNs.publish(documento());
+      sujo = false;
+    } catch(e){
+      salvando = false;
+      const code = e && e.code;
+      if (code === 'conflict') toast('Outra pessoa salvou ao mesmo tempo. A página vai recarregar com a versão dela.');
+      else if (code === 'not_granted' || code === 'not_writer') { modo = 'leitura'; toast('Você não tem permissão para editar esta página.'); render(); }
+      else toast('Não consegui salvar. Tente de novo em instantes.');
+      renderBarra();
+    }
+  }
+  function descartar(){
+    const b = lerEmbutido(); P = b.posts; PERFIL = b.perfil; sujo = false;
+    indexar(); if (atual !== null) fechar(); render(); renderBarra();
+  }
+  function baixar(){
+    try {
+      const url = URL.createObjectURL(new Blob([documento()], { type:'text/html' }));
+      const a = document.createElement('a'); a.href = url; a.download = 'wfia-calendario.html';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(url), 4000);
+    } catch(e){ toast('Não consegui gerar o arquivo neste navegador.'); }
+  }
 
   // ---------- datas ----------
   const WD = ['dom','seg','ter','qua','qui','sex','sáb'];
   const WDL = ['domingo','segunda','terça','quarta','quinta','sexta','sábado'];
-  const MO = ['jan','fev','mar','abr','mai','jun','jul','ago','set','out','nov','dez'];
   const iso = d => `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
   const parse = s => { const [y,m,d] = s.split('-').map(Number); return new Date(y, m-1, d); };
   const addDays = (s,n) => { const d = parse(s); d.setDate(d.getDate()+n); return iso(d); };
   const dm = s => { const d = parse(s); return `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')}`; };
   const fora = s => s < PERIODO.de || s > PERIODO.ate;
   const fasesDoDia = s => FASES.filter(f => s >= f.de && s <= f.ate);
-  const semanaDe = p => p.d ? SEMANAS.findIndex((w,i) => p.d >= w.inicio && p.d <= addDays(w.inicio,6)) : p.semana;
+  const semanaDe = p => p.d ? SEMANAS.findIndex(w => p.d >= w.inicio && p.d <= addDays(w.inicio,6)) : (p.semana ?? 0);
   const esc = s => String(s ?? '').replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
   const $ = s => document.querySelector(s);
+  const faseDoDiaTxt = d => { const fs = fasesDoDia(d).map(f => f.nome); return fs.length ? fs.join(' e ') : ''; };
 
-  P.forEach((p,i) => { p.i = i; p.st = stId(p.status); p.w = semanaDe(p); });
-  // ordem de navegação no painel: semana, data, canal
   const ordemCanal = id => CANAIS.findIndex(c => c.id === id);
-  const ORDEM = [...P].sort((a,b) => (a.w - b.w) || ((a.d||'9') < (b.d||'9') ? -1 : (a.d||'9') > (b.d||'9') ? 1 : 0) || (ordemCanal(a.c) - ordemCanal(b.c)));
+  let ORDEM = [];
+  function indexar(){
+    P.forEach((p,i) => { p.i = i; p.st = stId(p.status); p.w = semanaDe(p); });
+    ORDEM = [...P].sort((a,b) => (a.w - b.w) || ((a.d||'9') < (b.d||'9') ? -1 : (a.d||'9') > (b.d||'9') ? 1 : 0) || (ordemCanal(a.c) - ordemCanal(b.c)) || (a.i - b.i));
+  }
+  indexar();
 
-  // ---------- estado ----------
+  // ---------- estado de tela ----------
   const VIEWS = ['visao-geral','semana-1','semana-2','semana-3'];
   let view = 'semana-1';
   let atual = null;
+  let editando = false;
 
   function lerHash(){
     const h = location.hash.replace('#','');
     view = VIEWS.includes(h) ? h : 'semana-1';
+  }
+
+  const toastEl = document.createElement('div'); toastEl.className = 'toast'; document.body.appendChild(toastEl);
+  function toast(msg){
+    toastEl.textContent = msg; toastEl.classList.add('show');
+    clearTimeout(toast._t); toast._t = setTimeout(() => toastEl.classList.remove('show'), 3800);
   }
 
   // ---------- cabeçalho ----------
@@ -709,16 +603,38 @@ PARE de vender código, técnica ou ferramentas. **Comece a vender LUCRO e TEMPO
     $('#legendFases').innerHTML = FASES.map(f =>
       `<span title="${dm(f.de)} a ${dm(f.ate)}"><b class="fb-${f.id}"></b>${f.nome}</span>`).join('');
     $('#legendStatus').innerHTML = STATUS.map(s => `<span><b class="d-${s.id}"></b>${s.nome}</span>`).join('');
+  }
+  function renderResumo(){
     const definidos = P.filter(p => p.st !== 'definir').length;
     $('#resumoGeral').textContent = `${P.length} posts no período · ${definidos} com tema ou texto`;
   }
+  function renderBarra(){
+    const el = $('#barra');
+    if (modo === 'iniciando') { el.innerHTML = `<span class="estado">Carregando…</span>`; return; }
+    if (modo === 'leitura') { el.innerHTML = `<span class="estado">Somente leitura</span>`; return; }
+    if (modo === 'local') {
+      el.innerHTML = `<span class="estado ok"><b></b>Edições salvas neste navegador</span>` +
+        `<button type="button" class="btn" id="bBaixar">Baixar HTML atualizado</button>`;
+      return;
+    }
+    if (salvando) { el.innerHTML = `<span class="estado salvando"><b></b>Salvando…</span>`; return; }
+    if (sujo) {
+      el.innerHTML = `<span class="estado pendente"><b></b>Alterações não salvas</span>` +
+        `<button type="button" class="btn" id="bDescartar">Descartar</button>` +
+        `<button type="button" class="btn btn-primary" id="bSalvar">Salvar para todos</button>`;
+      return;
+    }
+    el.innerHTML = `<span class="estado ok"><b></b>Tudo salvo · clique num post para editar</span>`;
+  }
 
   // ---------- semana ----------
+  const PERSONAS = ['Gestor de tráfego','Dono de agência','Iniciante no digital','Todas'];
   const PERSONA_CURTA = { 'Gestor de tráfego':'Gestor', 'Dono de agência':'Agência', 'Iniciante no digital':'Iniciante', 'Todas':'Todas' };
   const personasDe = p => (p.persona || '').split(',').map(s => s.trim()).filter(s => PERSONA_CURTA[s]);
   const funilId = f => ({ Topo:'topo', Meio:'meio', Fundo:'fundo' })[f] || null;
   const temCTA = p => p.tipo ? p.tipo === 'Com CTA' : !!(p.cta && !/^n[ãa]o$/i.test(p.cta));
   const ctaRotulo = p => (!p.cta || p.cta === 'Sim') ? 'CTA' : p.cta;
+  const tituloDe = p => p.ideia || (p.links?.length ? 'Post a partir de referência' : 'Tema a definir');
 
   function tagsPost(p){
     const t = [];
@@ -731,7 +647,7 @@ PARE de vender código, técnica ou ferramentas. **Comece a vender LUCRO e TEMPO
 
   function cardPost(p){
     const vazio = !p.ideia;
-    const titulo = p.ideia || (p.links?.length ? 'Post a partir de referência' : 'Tema a definir');
+    const titulo = tituloDe(p);
     const meta = [];
     if (p.tipo === 'Sem CTA') meta.push('Sem CTA');
     const ic = [];
@@ -745,6 +661,8 @@ PARE de vender código, técnica ou ferramentas. **Comece a vender LUCRO e TEMPO
       (meta.length ? `<span class="meta">${meta.join('<span>·</span>')}</span>` : '') +
       `</button>`;
   }
+  const botaoAdd = (c, d, w) => podeEditar()
+    ? `<button type="button" class="add" data-c="${c}" ${d ? `data-d="${d}"` : `data-w="${w}"`} aria-label="Adicionar post">+</button>` : '';
 
   function buildSemana(wi){
     const w = SEMANAS[wi];
@@ -757,7 +675,7 @@ PARE de vender código, técnica ou ferramentas. **Comece a vender LUCRO e TEMPO
     h += `<div class="week-head"><h2>${w.nome}</h2><small>${dm(dias[0])} a ${dm(dias[6])} · ${nPosts} posts</small>` +
          fasesSemana.map(id => `<span class="tag-fase ${id}">${FASES.find(f => f.id === id).nome}</span>`).join('') +
          `<div class="rule"></div></div>`;
-    h += `<div class="scroller"><div class="grid"><div></div>`;
+    h += `<div class="scroller"><div class="grid${podeEditar() ? ' editavel' : ''}"><div></div>`;
     dias.forEach(d => {
       const dt = parse(d);
       const fs = fora(d) ? [] : fasesDoDia(d);
@@ -781,10 +699,10 @@ PARE de vender código, técnica ou ferramentas. **Comece a vender LUCRO e TEMPO
         dias.forEach(d => {
           const ps = doCanal.filter(p => p.d === d);
           const cls = 'cell' + (ps.length ? ' filled' : '') + (fora(d) ? ' fora' : '') + (FERIADOS.includes(d) && !ps.length ? ' feriado' : '');
-          h += `<div class="${cls}">${ps.map(cardPost).join('')}</div>`;
+          h += `<div class="${cls}">${ps.map(cardPost).join('')}${botaoAdd(c.id, d)}</div>`;
         });
         const sem = doCanal.filter(p => !p.d);
-        h += `<div class="cell${sem.length ? ' filled' : ''}">${sem.map(cardPost).join('')}</div>`;
+        h += `<div class="cell${sem.length ? ' filled' : ''}">${sem.map(cardPost).join('')}${botaoAdd(c.id, null, wi)}</div>`;
       });
     });
     h += `</div></div></section>`;
@@ -864,6 +782,12 @@ PARE de vender código, técnica ou ferramentas. **Comece a vender LUCRO e TEMPO
         </table></div>
       </div>
       <div class="card largo">
+        <h3>Prévia dos posts</h3>
+        ${podeEditar()
+          ? `<div class="campo"><label for="f-perfil">Nome do perfil na prévia</label><input id="f-perfil" type="text" value="${esc(PERFIL)}"></div>`
+          : `<p>Perfil usado na prévia: <strong>${esc(PERFIL)}</strong></p>`}
+      </div>
+      <div class="card largo">
         <h3>Roteiro pro YouTube</h3>
         <div class="links">
           <a href="https://www.youtube.com/watch?v=JZVmL99ClfA" target="_blank" rel="noopener noreferrer">Vídeo usado como esqueleto ↗</a>
@@ -874,8 +798,13 @@ PARE de vender código, técnica ou ferramentas. **Comece a vender LUCRO e TEMPO
   }
 
   function render(){
+    const sx = window.scrollX, sy = window.scrollY;
+    const scrolls = [...document.querySelectorAll('.scroller')].map(s => s.scrollLeft);
     $('#main').innerHTML = buildVisao() + SEMANAS.map((_,i) => buildSemana(i)).join('');
+    document.querySelectorAll('.scroller').forEach((s,k) => { s.scrollLeft = scrolls[k] || 0; });
     mostrarView();
+    renderResumo();
+    window.scrollTo(sx, sy);
   }
   function mostrarView(){
     document.querySelectorAll('.view').forEach(v => { v.hidden = v.dataset.view !== view; });
@@ -890,37 +819,37 @@ PARE de vender código, técnica ou ferramentas. **Comece a vender LUCRO e TEMPO
       `<p>${esc(par).replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\n/g,'<br>')}</p>`).join('');
   }
   const textoPlano = t => t.replace(/\*\*(.+?)\*\*/g,'$1');
+  const iniciais = n => (n || '').trim().split(/\s+/).filter(Boolean).slice(0,2).map(x => x[0].toUpperCase()).join('');
 
   function previa(p){
-    const av = `<div class="av" aria-hidden="true"></div>`;
+    const av = `<div class="av" aria-hidden="true">${esc(iniciais(PERFIL))}</div>`;
     if (p.c === 'threads') {
       const partes = p.texto.split(/(?=\*\*\d+\/\d+\*\*)/).map(s => s.trim()).filter(Boolean);
       return `<div class="mock" id="textoPost">` + partes.map((parte, i) =>
         `<div class="th-item"><div class="th-col">${av}<i></i></div><div>` +
-        `<div class="mock-nome">Perfil da marca <span class="mock-sub">· ${i === 0 ? 'agora' : 'fio'}</span></div>` +
+        `<div class="mock-nome">${esc(PERFIL)} <span class="mock-sub">· ${i === 0 ? 'agora' : 'fio'}</span></div>` +
         `<div class="mock-corpo">${textoHTML(parte)}</div>` +
         `<div class="th-acoes" aria-hidden="true"><span>♡</span><span>○</span><span>↻</span><span>➤</span></div></div></div>`).join('') + `</div>`;
     }
     const longo = p.texto.length > 260;
-    return `<div class="mock" id="textoPost"><div class="mock-head">${av}<div><div class="mock-nome">Perfil da marca</div><div class="mock-sub">Agora · público</div></div></div>` +
+    return `<div class="mock" id="textoPost"><div class="mock-head">${av}<div><div class="mock-nome">${esc(PERFIL)}</div><div class="mock-sub">Agora · público</div></div></div>` +
       `<div class="mock-corpo${longo ? ' cortado' : ''}">${textoHTML(p.texto)}</div>` +
       (longo ? `<button type="button" class="ver-mais" id="verMais">…ver mais</button>` : '') +
       `<div class="mock-acoes" aria-hidden="true"><span>Gostei</span><span>Comentar</span><span>Compartilhar</span><span>Enviar</span></div></div>`;
   }
 
-  function abrir(i){
-    atual = i;
-    const p = P[i];
+  function cabecalhoPainel(p){
     const c = canal(p.c);
     const g = GRUPOS.find(x => x.id === c.grupo);
-    const stNome = p.status || 'A definir';
     const quando = p.d ? `${WDL[parse(p.d).getDay()]}, ${dm(p.d)}` : `${SEMANAS[p.w].nome}, dia a definir`;
-
     $('#pEyebrow').textContent = `${g.id === 'youtube' ? 'YouTube · ' : ''}${c.nome}`;
     $('#pEyebrow').style.color = `var(--g-${g.id})`;
-    $('#pTitle').textContent = p.ideia || (p.links?.length ? 'Post a partir de referência' : 'Tema a definir');
-    $('#pSub').textContent = `${quando} · ${p.fase}`;
+    $('#pTitle').textContent = tituloDe(p);
+    $('#pSub').textContent = p.fase ? `${quando} · ${p.fase}` : quando;
+  }
 
+  function corpoLeitura(p){
+    const stNome = p.status || 'A definir';
     const fichas = [
       ['Status', `<span class="pill s-${p.st}"><span class="dot d-${p.st}"></span>${esc(stNome)}</span>`],
       ['Persona', esc(p.persona || 'A definir')],
@@ -941,7 +870,65 @@ PARE de vender código, técnica ou ferramentas. **Comece a vender LUCRO e TEMPO
       const noLink = p.links?.some(([n]) => /texto/i.test(n));
       b += `<div class="bloco"><label>Prévia do post</label><div class="sem-texto">${noLink ? 'O texto está no documento do link acima.' : 'Texto ainda não escrito no planejamento.'}</div></div>`;
     }
-    $('#pBody').innerHTML = b;
+    return b;
+  }
+
+  const STATUS_OPCOES = ['Ideia','Referência','Em produção','Texto pronto','Pronto','Feito','Agendado','Postado','A definir'];
+  function corpoEdicao(p){
+    const opDatas = SEMANAS.map((w,wi) =>
+      `<optgroup label="${w.nome}">` +
+      Array.from({length:7}, (_,k) => addDays(w.inicio,k)).map(d =>
+        `<option value="${d}"${p.d === d ? ' selected' : ''}>${WD[parse(d).getDay()]} ${dm(d)}${fora(d) ? ' (fora do período)' : ''}</option>`).join('') +
+      `<option value="w:${wi}"${!p.d && p.w === wi ? ' selected' : ''}>${w.nome}, dia a definir</option></optgroup>`).join('');
+    const sts = STATUS_OPCOES.includes(p.status) || !p.status ? STATUS_OPCOES : [p.status, ...STATUS_OPCOES];
+    const pes = personasDe(p);
+    const linksTxt = (p.links || []).map(([n,u]) => `${n} | ${u}`).join('\n');
+    const pill = (grupo, val, atualV) => `<button type="button" class="opc" data-campo="${grupo}" data-v="${esc(val)}" aria-pressed="${atualV === val}">${esc(val)}</button>`;
+
+    return `<div class="form">
+      <div class="dupla">
+        <div class="campo"><label for="f-c">Rede</label><select id="f-c">${CANAIS.map(c => `<option value="${c.id}"${c.id === p.c ? ' selected' : ''}>${c.nome}</option>`).join('')}</select></div>
+        <div class="campo"><label for="f-d">Data</label><select id="f-d">${opDatas}</select></div>
+      </div>
+      <div class="campo"><label for="f-ideia">Ideia do post</label><textarea id="f-ideia" rows="2" placeholder="Tema, gancho ou título">${esc(p.ideia)}</textarea></div>
+      <div class="campo"><label for="f-status">Status</label><select id="f-status">${sts.map(s => `<option${s === (p.status || 'A definir') ? ' selected' : ''}>${esc(s)}</option>`).join('')}</select></div>
+      <div class="campo"><label>Funil</label><div class="opcs">${['Topo','Meio','Fundo','A definir'].map(v => pill('funil', v, p.funil || 'A definir')).join('')}</div></div>
+      <div class="campo"><label>Persona</label><div class="opcs">${PERSONAS.map(v =>
+        `<button type="button" class="opc" data-campo="persona" data-v="${esc(v)}" aria-pressed="${pes.includes(v)}">${esc(v)}</button>`).join('')}</div></div>
+      <div class="dupla">
+        <div class="campo"><label for="f-cta">CTA</label><input id="f-cta" type="text" value="${esc(p.cta)}" placeholder="Evento, Vendas, Reality, Não…"></div>
+        <div class="campo"><label for="f-tipo">Tipo</label><select id="f-tipo">${['','Com CTA','Sem CTA'].map(v => `<option value="${v}"${(p.tipo || '') === v ? ' selected' : ''}>${v || 'Não usar'}</option>`).join('')}</select></div>
+      </div>
+      <div class="dupla">
+        <div class="campo"><label for="f-objetivo">Objetivo</label><input id="f-objetivo" type="text" value="${esc(p.objetivo)}" placeholder="Alcance, Conversão…"></div>
+        <div class="campo"><label for="f-formato">Formato</label><input id="f-formato" type="text" value="${esc(p.formato)}" placeholder="Foto + texto, Fio…"></div>
+      </div>
+      <div class="campo"><label for="f-fase">Fase</label><input id="f-fase" type="text" value="${esc(p.fase)}"></div>
+      <div class="campo"><label for="f-links">Links</label><textarea id="f-links" rows="2" placeholder="Referência | https://…">${esc(linksTxt)}</textarea><div class="dica">Um por linha: nome, barra vertical e o endereço.</div></div>
+      <div class="campo"><label for="f-obs">Observação</label><textarea id="f-obs" rows="2">${esc(p.obs)}</textarea></div>
+      <div class="campo"><label for="f-texto">Texto do post</label><textarea id="f-texto" rows="12" class="texto-edit">${esc(p.texto)}</textarea><div class="dica">Use **assim** para negrito. No Threads, comece cada parte com **1/5**, **2/5**… para virar fio na prévia.</div></div>
+      <div class="rodape-form">
+        <button type="button" class="btn-perigo" id="excluir">Excluir post</button>
+      </div>
+    </div>`;
+  }
+
+  function preencherCorpo(){
+    if (atual === null) return;
+    const p = P[atual];
+    $('#pBody').innerHTML = (editando && podeEditar()) ? corpoEdicao(p) : corpoLeitura(p);
+    const be = $('#editar');
+    be.hidden = !podeEditar();
+    be.textContent = editando ? 'Ver prévia' : 'Editar';
+    be.setAttribute('aria-pressed', String(editando));
+  }
+
+  function abrir(i, comEdicao){
+    if (typeof comEdicao === 'boolean') editando = comEdicao;
+    atual = i;
+    const p = P[i];
+    cabecalhoPainel(p);
+    preencherCorpo();
     $('#pBody').scrollTop = 0;
 
     const pos = ORDEM.findIndex(x => x.i === i);
@@ -949,15 +936,17 @@ PARE de vender código, técnica ou ferramentas. **Comece a vender LUCRO e TEMPO
     $('#nextPost').disabled = pos >= ORDEM.length - 1;
     $('#pPos').textContent = `${pos+1} de ${ORDEM.length}`;
 
-    // a semana do post precisa estar visível
     const v = `semana-${p.w+1}`;
     if (view !== v) { view = v; history.replaceState(null,'',`#${v}`); mostrarView(); }
-    document.querySelectorAll('.post.active').forEach(el => el.classList.remove('active'));
-    const el = document.querySelector(`.post[data-i="${i}"]`);
-    if (el) { el.classList.add('active'); el.scrollIntoView({block:'nearest',inline:'nearest'}); }
+    marcarAtivo(true);
 
     panel.classList.add('open'); scrim.classList.add('open');
     panel.removeAttribute('inert'); panel.setAttribute('aria-hidden','false');
+  }
+  function marcarAtivo(rolar){
+    document.querySelectorAll('.post.active').forEach(el => el.classList.remove('active'));
+    const el = atual !== null && document.querySelector(`.post[data-i="${atual}"]`);
+    if (el) { el.classList.add('active'); if (rolar) el.scrollIntoView({block:'nearest',inline:'nearest'}); }
   }
   function fechar(){
     panel.classList.remove('open'); scrim.classList.remove('open');
@@ -974,6 +963,78 @@ PARE de vender código, técnica ou ferramentas. **Comece a vender LUCRO e TEMPO
     if (prox) abrir(prox.i);
   }
 
+  // edição: cada mudança atualiza o post, a grade e o cabeçalho do painel
+  let renderTimer = null;
+  function aplicar(patch, redesenharForm){
+    const p = P[atual];
+    Object.assign(p, patch);
+    indexar();
+    cabecalhoPainel(p);
+    clearTimeout(renderTimer);
+    renderTimer = setTimeout(() => { render(); marcarAtivo(false); }, 200);
+    if (redesenharForm) { const st = $('#pBody').scrollTop; preencherCorpo(); $('#pBody').scrollTop = st; }
+    mudou();
+  }
+  function lerLinks(txt){
+    return txt.split('\n').map(l => l.trim()).filter(Boolean).map(l => {
+      const k = l.lastIndexOf('|');
+      if (k < 0) return ['Link', l];
+      return [l.slice(0,k).trim() || 'Link', l.slice(k+1).trim()];
+    }).filter(([,u]) => u);
+  }
+
+  $('#pBody').addEventListener('input', e => {
+    if (atual === null || !editando) return;
+    const id = e.target.id;
+    const v = e.target.value;
+    if (id === 'f-ideia') aplicar({ ideia:v.trim() ? v : '' });
+    else if (id === 'f-cta') aplicar({ cta:v });
+    else if (id === 'f-objetivo') aplicar({ objetivo:v });
+    else if (id === 'f-formato') aplicar({ formato:v });
+    else if (id === 'f-fase') aplicar({ fase:v });
+    else if (id === 'f-obs') aplicar({ obs:v });
+    else if (id === 'f-texto') aplicar({ texto:v.trim() ? v : '' });
+    else if (id === 'f-links') aplicar({ links:lerLinks(v) });
+  });
+  $('#pBody').addEventListener('change', e => {
+    if (atual === null || !editando) return;
+    const id = e.target.id, v = e.target.value;
+    if (id === 'f-c') aplicar({ c:v });
+    else if (id === 'f-status') aplicar({ status:v });
+    else if (id === 'f-tipo') aplicar({ tipo:v });
+    else if (id === 'f-d') {
+      if (v.startsWith('w:')) aplicar({ d:null, semana:Number(v.slice(2)) });
+      else aplicar({ d:v, semana:undefined });
+      const pos = ORDEM.findIndex(x => x.i === atual);
+      $('#pPos').textContent = `${pos+1} de ${ORDEM.length}`;
+      const vw = `semana-${P[atual].w+1}`;
+      if (view !== vw) { view = vw; history.replaceState(null,'',`#${vw}`); setTimeout(mostrarView, 220); }
+    }
+  });
+
+  $('#main').addEventListener('input', e => {
+    if (e.target.id === 'f-perfil') { PERFIL = e.target.value; mudou(); }
+  });
+
+  function novoPost(c, d, w){
+    const p = { c, d:d || null, fase:d ? faseDoDiaTxt(d) : '', ideia:'', persona:'A definir', funil:'A definir', cta:'', status:'Ideia' };
+    if (!d) p.semana = w;
+    P.push(p);
+    indexar(); render(); mudou();
+    abrir(P.length - 1, true);
+    setTimeout(() => $('#f-ideia')?.focus(), 60);
+  }
+  let confirmando = false;
+  function excluir(btn){
+    if (!confirmando) { confirmando = true; btn.textContent = 'Clique de novo para confirmar'; btn.classList.add('armado'); setTimeout(() => { confirmando = false; if (btn.isConnected) { btn.textContent = 'Excluir post'; btn.classList.remove('armado'); } }, 3000); return; }
+    confirmando = false;
+    const i = atual;
+    fechar();
+    P.splice(i, 1);
+    indexar(); render(); mudou();
+    toast('Post excluído');
+  }
+
   // ---------- eventos ----------
   $('#wtabs').addEventListener('click', e => {
     const t = e.target.closest('.wtab'); if (!t) return;
@@ -982,9 +1043,24 @@ PARE de vender código, técnica ou ferramentas. **Comece a vender LUCRO e TEMPO
     mostrarView();
   });
   $('#main').addEventListener('click', e => {
+    const add = e.target.closest('.add');
+    if (add) { novoPost(add.dataset.c, add.dataset.d || null, add.dataset.w !== undefined ? Number(add.dataset.w) : 0); return; }
     const b = e.target.closest('.post'); if (b) abrir(Number(b.dataset.i));
   });
   $('#pBody').addEventListener('click', e => {
+    const opc = e.target.closest('.opc');
+    if (opc && atual !== null) {
+      const campo = opc.dataset.campo, v = opc.dataset.v;
+      if (campo === 'funil') aplicar({ funil:v }, true);
+      else if (campo === 'persona') {
+        let pes = personasDe(P[atual]);
+        if (v === 'Todas') pes = pes.includes('Todas') ? [] : ['Todas'];
+        else { pes = pes.filter(x => x !== 'Todas'); pes = pes.includes(v) ? pes.filter(x => x !== v) : [...pes, v]; }
+        aplicar({ persona: pes.length ? pes.join(', ') : 'A definir' }, true);
+      }
+      return;
+    }
+    if (e.target.id === 'excluir') { excluir(e.target); return; }
     if (e.target.id === 'verMais') {
       document.querySelector('#textoPost .mock-corpo')?.classList.remove('cortado');
       e.target.remove();
@@ -1002,20 +1078,42 @@ PARE de vender código, técnica ou ferramentas. **Comece a vender LUCRO e TEMPO
       btn.textContent = 'Texto selecionado';
     }
   });
+  $('#editar').addEventListener('click', () => { if (atual === null) return; editando = !editando; preencherCorpo(); });
+  $('#barra').addEventListener('click', e => {
+    if (e.target.id === 'bSalvar') salvar();
+    else if (e.target.id === 'bDescartar') descartar();
+    else if (e.target.id === 'bBaixar') baixar();
+  });
   $('#closePanel').addEventListener('click', fechar);
   scrim.addEventListener('click', fechar);
   $('#prevPost').addEventListener('click', () => passo(-1));
   $('#nextPost').addEventListener('click', () => passo(1));
   document.addEventListener('keydown', e => {
     if (atual === null) return;
+    const digitando = e.target.closest('input,textarea,select');
     if (e.key === 'Escape') fechar();
-    else if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { if (!e.target.closest('input,textarea')) { e.preventDefault(); passo(1); } }
-    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { if (!e.target.closest('input,textarea')) { e.preventDefault(); passo(-1); } }
+    else if (digitando) return;
+    else if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { e.preventDefault(); passo(1); }
+    else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { e.preventDefault(); passo(-1); }
   });
   window.addEventListener('hashchange', () => { lerHash(); mostrarView(); });
+  window.addEventListener('beforeunload', e => { if (sujo && !salvando) { e.preventDefault(); e.returnValue = ''; } });
 
   lerHash();
   renderLegendas();
   render();
+  renderBarra();
+
+  if (modo === 'iniciando') {
+    window.claude.use('artifact').then(ns => {
+      artifactNs = ns;
+      modo = ns ? 'artifact' : 'leitura';
+      render(); renderBarra();
+      let r = null;
+      try { r = sessionStorage.getItem('wfia-reabrir'); sessionStorage.removeItem('wfia-reabrir'); } catch(e){}
+      if (r !== null && P[Number(r)]) abrir(Number(r), false);
+    }).catch(() => { modo = 'leitura'; render(); renderBarra(); });
+  }
 })();
 </script>
+</body></html>
