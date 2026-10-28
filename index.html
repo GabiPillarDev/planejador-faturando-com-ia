@@ -177,6 +177,11 @@
     padding:6px 8px 7px;box-shadow:0 1px 2px var(--shadow);
     transition:border-color .12s,transform .12s;flex:1;
   }
+  .post{cursor:pointer}
+  .post[draggable="true"]{cursor:grab}
+  .post[draggable="true"]:active{cursor:grabbing}
+  .post.arrastando{opacity:.35}
+  .cell.alvo{border-style:solid;border-color:var(--focus);background:color-mix(in srgb,var(--focus) 9%,transparent);box-shadow:0 0 0 2px color-mix(in srgb,var(--focus) 25%,transparent)}
   .post:hover{border-color:var(--text-3);transform:translateY(-1px)}
   .post:focus-visible{outline:2px solid var(--focus);outline-offset:2px}
   .post.active{border-color:var(--focus);box-shadow:0 0 0 2px color-mix(in srgb,var(--focus) 25%,transparent)}
@@ -654,12 +659,12 @@
     if (p.texto) ic.push('✎');
     if (p.links?.length) ic.push('↗');
     const stNome = STATUS.find(s => s.id === p.st).nome;
-    return `<button type="button" class="post${vazio && !p.links?.length ? ' vazio' : ''}${atual === p.i ? ' active' : ''}" data-i="${p.i}" aria-label="${esc(canal(p.c).nome)}: ${esc(titulo)}. Status ${esc(p.status || stNome)}">` +
+    return `<div role="button" tabindex="0" class="post${vazio && !p.links?.length ? ' vazio' : ''}${atual === p.i ? ' active' : ''}" data-i="${p.i}"${podeEditar() ? ' draggable="true"' : ''} aria-label="${esc(canal(p.c).nome)}: ${esc(titulo)}. Status ${esc(p.status || stNome)}">` +
       `<span class="linha"><span class="dot d-${p.st}" title="${esc(p.status || stNome)}"></span><span class="txt">${esc(titulo)}</span>` +
       (ic.length ? `<span class="ic">${ic.join(' ')}</span>` : '') + `</span>` +
       tagsPost(p) +
       (meta.length ? `<span class="meta">${meta.join('<span>·</span>')}</span>` : '') +
-      `</button>`;
+      `</div>`;
   }
   const botaoAdd = (c, d, w) => podeEditar()
     ? `<button type="button" class="add" data-c="${c}" ${d ? `data-d="${d}"` : `data-w="${w}"`} aria-label="Adicionar post">+</button>` : '';
@@ -699,10 +704,10 @@
         dias.forEach(d => {
           const ps = doCanal.filter(p => p.d === d);
           const cls = 'cell' + (ps.length ? ' filled' : '') + (fora(d) ? ' fora' : '') + (FERIADOS.includes(d) && !ps.length ? ' feriado' : '');
-          h += `<div class="${cls}">${ps.map(cardPost).join('')}${botaoAdd(c.id, d)}</div>`;
+          h += `<div class="${cls}" data-c="${c.id}" data-d="${d}">${ps.map(cardPost).join('')}${botaoAdd(c.id, d)}</div>`;
         });
         const sem = doCanal.filter(p => !p.d);
-        h += `<div class="cell${sem.length ? ' filled' : ''}">${sem.map(cardPost).join('')}${botaoAdd(c.id, null, wi)}</div>`;
+        h += `<div class="cell${sem.length ? ' filled' : ''}" data-c="${c.id}" data-w="${wi}">${sem.map(cardPost).join('')}${botaoAdd(c.id, null, wi)}</div>`;
       });
     });
     h += `</div></div></section>`;
@@ -1034,6 +1039,55 @@
     indexar(); render(); mudou();
     toast('Post excluído');
   }
+
+  // ---------- arrastar ----------
+  let arrastado = null;
+  function mover(i, c, d, w){
+    const p = P[i];
+    const patch = { c };
+    if (d) { if (p.d !== d) patch.fase = faseDoDiaTxt(d) || p.fase; patch.d = d; patch.semana = undefined; }
+    else { patch.d = null; patch.semana = w; }
+    if (p.c === c && p.d === (d || null) && (d || p.semana === w)) return;
+    Object.assign(p, patch);
+    indexar(); render(); mudou();
+    if (atual === i) { cabecalhoPainel(p); preencherCorpo(); const pos = ORDEM.findIndex(x => x.i === i); $('#pPos').textContent = `${pos+1} de ${ORDEM.length}`; marcarAtivo(false); }
+    const onde = d ? `${WD[parse(d).getDay()]} ${dm(d)}` : `${SEMANAS[w].nome}, dia a definir`;
+    toast(`Movido para ${canal(c).nome}, ${onde}`);
+  }
+  const limparAlvo = () => document.querySelectorAll('.cell.alvo').forEach(x => x.classList.remove('alvo'));
+  $('#main').addEventListener('dragstart', e => {
+    const el = e.target.closest && e.target.closest('.post[draggable="true"]');
+    if (!el || !podeEditar()) return;
+    arrastado = Number(el.dataset.i);
+    el.classList.add('arrastando');
+    try { e.dataTransfer.effectAllowed = 'move'; e.dataTransfer.setData('text/plain', String(arrastado)); } catch(_){}
+  });
+  $('#main').addEventListener('dragover', e => {
+    if (arrastado === null) return;
+    const cell = e.target.closest('.cell[data-c]'); if (!cell) return;
+    e.preventDefault();
+    try { e.dataTransfer.dropEffect = 'move'; } catch(_){}
+    if (!cell.classList.contains('alvo')) { limparAlvo(); cell.classList.add('alvo'); }
+  });
+  $('#main').addEventListener('dragleave', e => {
+    const cell = e.target.closest('.cell[data-c]');
+    if (cell && !cell.contains(e.relatedTarget)) cell.classList.remove('alvo');
+  });
+  $('#main').addEventListener('drop', e => {
+    if (arrastado === null) return;
+    const cell = e.target.closest('.cell[data-c]'); if (!cell) return;
+    e.preventDefault();
+    const i = arrastado; arrastado = null; limparAlvo();
+    mover(i, cell.dataset.c, cell.dataset.d || null, cell.dataset.w !== undefined ? Number(cell.dataset.w) : 0);
+  });
+  $('#main').addEventListener('dragend', () => {
+    arrastado = null; limparAlvo();
+    document.querySelectorAll('.post.arrastando').forEach(x => x.classList.remove('arrastando'));
+  });
+  $('#main').addEventListener('keydown', e => {
+    const el = e.target.closest('.post');
+    if (el && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); abrir(Number(el.dataset.i)); }
+  });
 
   // ---------- eventos ----------
   $('#wtabs').addEventListener('click', e => {
